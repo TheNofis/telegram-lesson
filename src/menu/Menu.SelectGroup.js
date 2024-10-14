@@ -3,19 +3,14 @@ import Api from "../api/api.js";
 
 export default async function (back) {
   const groupList = await Api.groups();
-  const markup = Markup.keyboard(
-    chunkArray(
-      groupList.map((group) => {
-        return `📚 ${group.name}`;
-      }),
-      2,
-    ),
-  )
-    .oneTime()
-    .resize();
-
-  if (back) markup.push("↩️ Назад ↩️");
-  return markup;
+  const chunked = chunkArray(
+    groupList.map((group) => {
+      return `📚 ${group.name}`;
+    }),
+    2,
+  );
+  if (back) chunked.push("↩️ Назад ↩️");
+  return Markup.keyboard(chunked).oneTime().resize();
 }
 
 function chunkArray(arr, size) {
