@@ -15,7 +15,7 @@ const SelectGroupNoBack = Api.groups().then((groups) => {
 });
 
 const SelectGroupBack = JSON.parse(JSON.stringify(SelectGroupNoBack));
-back.reply_markup.keyboard.push(["↩️ Назад ↩️"]);
+SelectGroupBack.reply_markup.keyboard.push(["↩️ Назад ↩️"]);
 
 export default {
   SelectGroupNoBack,
