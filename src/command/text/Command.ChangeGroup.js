@@ -13,12 +13,10 @@ export default class CommandSelect {
 
     if (text != "📚 Группы") return;
 
-    const menuSelectGroupEdit = MenuSelectGroup(true);
-
     this.ctx.telegram.sendMessage(
       chatId,
       "ℹ️ Редактирования\n\n✅ Изменения вашей группы\n🔻 Выберите вашу группу снизу",
-      menuSelectGroupEdit,
+      MenuSelectGroup(true),
     );
   }
 }
