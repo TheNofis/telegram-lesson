@@ -50,7 +50,6 @@ export default class CommandSelect {
 }
 
 function renderTable(rows) {
-  console.log(rows);
   const table = ["┏━━━━━━━━━━━━━━━━━━━━━━"];
 
   for (let i = 0; i < rows.length; i++) {
