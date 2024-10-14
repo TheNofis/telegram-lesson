@@ -1,0 +1,22 @@
+{
+  "name": "telegram-lesson",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "dev": "nodemon src/index.js",
+    "start": "bun src/index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "date-fns": "^4.1.0",
+    "dotenv": "^16.4.5",
+    "mongoose": "^8.7.1",
+    "redis": "^4.7.0",
+    "telegraf": "^4.16.3",
+    "uuid": "^10.0.0"
+  }
+}
