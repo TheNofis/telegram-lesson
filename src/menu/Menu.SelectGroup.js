@@ -2,7 +2,7 @@ import { Markup } from "telegraf";
 import Api from "../api/api.js";
 
 const SelectGroupNoBack = await Api.groups().then((groups) => {
-  Markup.keyboard(
+  return Markup.keyboard(
     chunkArray(
       groups.map((group) => {
         return `📚 ${group.name}`;
