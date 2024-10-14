@@ -2,7 +2,7 @@ import { Markup } from "telegraf";
 import Api from "../api/api.js";
 
 export default function MenuSelectGroup(back) {
-  Api.groups().then((groups) => {
+  return Api.groups().then((groups) => {
     const groupsList = chunkArray(
       groups.map((group) => {
         return `📚 ${group.name}`;
