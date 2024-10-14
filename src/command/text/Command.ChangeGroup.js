@@ -13,8 +13,7 @@ export default class CommandSelect {
 
     if (text != "📚 Группы") return;
 
-    const menuSelectGroupEdit = await MenuSelectGroup;
-    menuSelectGroupEdit.reply_markup.keyboard.push(["↩️ Назад ↩️"]);
+    const menuSelectGroupEdit = await MenuSelectGroup(true);
 
     this.ctx.telegram.sendMessage(
       chatId,
