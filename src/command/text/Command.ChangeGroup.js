@@ -16,7 +16,7 @@ export default class CommandSelect {
     this.ctx.telegram.sendMessage(
       chatId,
       "ℹ️ Редактирования\n\n✅ Изменения вашей группы\n🔻 Выберите вашу группу снизу",
-      MenuSelectGroup(true),
+      await MenuSelectGroup(true),
     );
   }
 }
