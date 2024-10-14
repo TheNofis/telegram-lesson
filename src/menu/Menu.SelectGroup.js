@@ -1,7 +1,7 @@
 import { Markup } from "telegraf";
 import Api from "../api/api.js";
 
-const SelectGroupNoBack = Api.groups().then((groups) => {
+const SelectGroupNoBack = await Api.groups().then((groups) => {
   Markup.keyboard(
     chunkArray(
       groups.map((group) => {
