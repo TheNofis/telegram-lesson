@@ -13,7 +13,7 @@ export default class CommandSelect {
 
     if (text != "📚 Группы") return;
 
-    const menuSelectGroupEdit = await MenuSelectGroup(true);
+    const menuSelectGroupEdit = MenuSelectGroup(true);
 
     this.ctx.telegram.sendMessage(
       chatId,
