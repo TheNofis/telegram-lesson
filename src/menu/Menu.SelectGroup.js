@@ -2,16 +2,20 @@ import { Markup } from "telegraf";
 import Api from "../api/api.js";
 
 export default async function (back) {
-  return Api.groups().then((groups) => {
-    const groupsList = chunkArray(
-      groups.map((group) => {
+  const groupList = await Api.groups();
+  const markup = Markup.keyboard(
+    chunkArray(
+      groupList.map((group) => {
         return `📚 ${group.name}`;
       }),
       2,
-    );
-    if (back) groupsList.push(["↩️ Назад ↩️"]);
-    return Markup.keyboard(groupsList).oneTime().resize();
-  });
+    ),
+  )
+    .oneTime()
+    .resize();
+
+  if (back) markup.push("↩️ Назад ↩️");
+  return markup;
 }
 
 function chunkArray(arr, size) {
