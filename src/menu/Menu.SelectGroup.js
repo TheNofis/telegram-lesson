@@ -1,17 +1,26 @@
 import { Markup } from "telegraf";
 import Api from "../api/api.js";
 
-export default async function (back) {
-  const groupList = await Api.groups();
-  const chunked = chunkArray(
-    groupList.map((group) => {
-      return `📚 ${group.name}`;
-    }),
-    2,
-  );
-  if (back) chunked.push("↩️ Назад ↩️");
-  return Markup.keyboard(chunked).oneTime().resize();
-}
+const SelectGroupNoBack = Api.groups().then((groups) => {
+  Markup.keyboard(
+    chunkArray(
+      groups.map((group) => {
+        return `📚 ${group.name}`;
+      }),
+      2,
+    ),
+  )
+    .oneTime()
+    .resize();
+});
+
+const SelectGroupBack = JSON.parse(JSON.stringify(SelectGroupNoBack));
+back.reply_markup.keyboard.push(["↩️ Назад ↩️"]);
+
+export default {
+  SelectGroupNoBack,
+  SelectGroupBack,
+};
 
 function chunkArray(arr, size) {
   const result = [];
