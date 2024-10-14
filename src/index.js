@@ -29,10 +29,7 @@ class Bot {
 
     mongoose.set("strictQuery", false);
     mongoose
-      .connect(this.mongoDBUrl, {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-      })
+      .connect(this.mongoDBUrl)
       .then(() => {
         console.log("MongoDB connected");
       })
