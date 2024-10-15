@@ -1,6 +1,6 @@
 import User from "../../db/model/User.js";
 
-import { MenuSelectGroupBack } from "../../menu/Menu.SelectGroup.js";
+import MenuSelectGroup from "../../menu/Menu.SelectGroup.js";
 
 export default class CommandSelect {
   constructor(bot, ctx) {
@@ -27,7 +27,7 @@ export default class CommandSelect {
           this.ctx.telegram.sendMessage(
             chatId,
             "ℹ️ Регистрация\n\n✅ Для удобной работы в боте надо зарегистрироваться!\n🔻 Выберите вашу группу снизу",
-            MenuSelectGroupBack,
+            MenuSelectGroup.MenuSelectGroupBack,
           );
         })
         .catch(() => {
