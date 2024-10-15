@@ -1,7 +1,7 @@
 import { Markup } from "telegraf";
 import Api from "../api/api.js";
 
-const SelectGroupNoBack = await Api.groups().then((groups) => {
+const MenuSelectGroupNoBack = await Api.groups().then((groups) => {
   return Markup.keyboard(
     chunkArray(
       groups.map((group) => {
@@ -14,12 +14,12 @@ const SelectGroupNoBack = await Api.groups().then((groups) => {
     .resize();
 });
 
-const SelectGroupBack = JSON.parse(JSON.stringify(SelectGroupNoBack));
-SelectGroupBack.reply_markup.keyboard.push(["↩️ Назад ↩️"]);
+const MenuSelectGroupBack = JSON.parse(JSON.stringify(MenuSelectGroupNoBack));
+MenuSelectGroupBack.reply_markup.keyboard.push(["↩️ Назад ↩️"]);
 
 export default {
-  SelectGroupNoBack,
-  SelectGroupBack,
+  MenuSelectGroupNoBack,
+  MenuSelectGroupBack,
 };
 
 function chunkArray(arr, size) {
