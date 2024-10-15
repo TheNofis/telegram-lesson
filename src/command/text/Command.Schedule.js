@@ -18,7 +18,6 @@ export default class CommandSelect {
     const lessons = (await api.lessons(this.user.groupId)).lessons;
 
     const currentDate = new Date();
-    currentDate.setDate(currentDate.getDate() + 1);
     if (text == "📋 Расписание на завтра")
       currentDate.setDate(currentDate.getDate() + 1);
 
