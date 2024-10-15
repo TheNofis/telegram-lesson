@@ -1,4 +1,4 @@
-import MenuSelectGroup from "../../menu/Menu.SelectGroup.js";
+import { MenuSelectGroupBack } from "../../menu/Menu.SelectGroup.js";
 
 export default class CommandSelect {
   constructor(props) {
@@ -16,7 +16,7 @@ export default class CommandSelect {
     this.ctx.telegram.sendMessage(
       chatId,
       "ℹ️ Редактирования\n\n✅ Изменения вашей группы\n🔻 Выберите вашу группу снизу",
-      await MenuSelectGroup(true),
+      MenuSelectGroupBack,
     );
   }
 }
