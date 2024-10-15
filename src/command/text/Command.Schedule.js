@@ -42,14 +42,26 @@ export default class CommandSelect {
 
     this.ctx.telegram.sendMessage(
       chatId,
-      renderTable(getForCurrentDay),
+      renderTable(getForCurrentDay, currentDate),
       MenuMain,
     );
   }
 }
 
-function renderTable(rows) {
-  const table = ["┏━━━━━━━━━━━━━━━━━━━━━━"];
+const weekDay = [
+  "Воскресенье",
+  "Понедельник",
+  "Вторник",
+  "Среда",
+  "Четверг",
+  "Пятница",
+  "Суббота",
+];
+
+function renderTable(rows, date) {
+  const table = [
+    `┏━━━━━━━━━━━━━━━━━━━━━━\n┃ Дата: ${format(date, "dd.MM.yy")} (${weekDay[date.getDay()]})\n┣━━━━━━━━━━━━━━━━━━━━━━`,
+  ];
 
   for (let i = 0; i < rows.length; i++) {
     const row = rows[i];
