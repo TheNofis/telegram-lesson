@@ -1,10 +1,10 @@
+import CommandClass from "../Command.Class.js";
+
 import MenuSelectGroup from "../../menu/Menu.SelectGroup.js";
 
-export default class CommandSelect {
+export default class CommandSelect extends CommandClass {
   constructor(props) {
-    this.bot = props.bot;
-    this.ctx = props.ctx;
-    this.user = props.user;
+    super(props);
   }
 
   async handle() {

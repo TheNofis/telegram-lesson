@@ -1,12 +1,11 @@
+import CommandClass from "../Command.Class.js";
 import Api from "../../api/api.js";
 
 import MenuMain from "../../menu/Menu.Main.js";
 
-export default class CommandSelect {
+export default class CommandSelect extends CommandClass {
   constructor(props) {
-    this.bot = props.bot;
-    this.ctx = props.ctx;
-    this.user = props.user;
+    super(props);
   }
   async handle() {
     const text = this?.ctx?.update?.message?.text;
