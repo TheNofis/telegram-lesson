@@ -41,7 +41,7 @@ export default class CommandSelect extends CommandClass {
       .catch(() => {
         this.ctx.telegram.sendMessage(
           chatId,
-          `❌ Ошибка\n\nℹ️ Не удалось зарегистрироваться!`,
+          `❌ Ошибка\n\nℹ️ Не удалось сохранить группу`,
         );
       });
   }
