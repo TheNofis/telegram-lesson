@@ -27,7 +27,7 @@ export default class CommandSelect {
           this.ctx.telegram.sendMessage(
             chatId,
             "ℹ️ Регистрация\n\n✅ Для удобной работы в боте надо зарегистрироваться!\n🔻 Выберите вашу группу снизу",
-            MenuSelectGroup.MenuSelectGroupBack,
+            MenuSelectGroup.MenuSelectGroupNoBack,
           );
         })
         .catch(() => {
