@@ -65,7 +65,7 @@ const weekDay = [
 
 function renderTable(rows, date) {
   const table = [
-    `┏━━━━━━━━━━━━━━━━━━━━━━\n┃ Дата: ${format(date, "dd.MM.yy")} (${weekDay[date.getDay()]})\n┣━━━━━━━━━━━━━━━━━━━━━━`,
+    `┏━━━━━━━━━━━━━━━━━━━━━━\n┃ Дата:    ${format(date, "dd.MM.yy")} (${weekDay[date.getDay()]})\n┣━━━━━━━━━━━━━━━━━━━━━━`,
   ];
 
   for (let i = 0; i < rows.length; i++) {
