@@ -1,4 +1,4 @@
-import CommandClass from "../Command.Class.js";
+import CommandClass from "./Command.Class.js";
 
 import MenuSelectGroup from "../../menu/Menu.SelectGroup.js";
 

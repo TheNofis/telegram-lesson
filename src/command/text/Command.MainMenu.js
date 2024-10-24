@@ -1,4 +1,4 @@
-import CommandClass from "../Command.Class.js";
+import CommandClass from "./Command.Class.js";
 
 import MenuMain from "../../menu/Menu.Main.js";
 
