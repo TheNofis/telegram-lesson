@@ -35,36 +35,38 @@ async function post({ url, data }) {
 export default class {
   static async groups() {
     const cache = await redisClient.get("groups");
-    if (cache === null) {
-      const getGroups = (await get(`${publicationId}/groups`)).sort((a, b) => {
+    if (cache !== null) return JSON.parse(cache);
+
+    return get(`${publicationId}/groups`).then(async (groups) => {
+      const sortedGroups = groups.sort((a, b) => {
         if (a.name > b.name) return 1;
         if (a.name < b.name) return -1;
         return 0;
       });
-      await redisClient.set("groups", JSON.stringify(getGroups));
+
+      await redisClient.set("groups", JSON.stringify(sortedGroups));
       redisClient.expire("groups", 3600);
-      return getGroups;
-    }
-    return JSON.parse(cache);
+      return sortedGroups;
+    });
   }
   static async lessons(groupId) {
     const cache = await redisClient.get(`lessons-${groupId}`);
-    if (cache === null) {
-      const getLessons = await post({
-        url: "group/lessons",
-        data: {
-          publicationId,
-          groupId,
-          date: format(
-            startOfWeek(new Date(), { weekStartsOn: -6 }),
-            "yyyy-MM-dd",
-          ),
-        },
-      });
-      await redisClient.set(`lessons-${groupId}`, JSON.stringify(getLessons));
+    if (cache !== null) return JSON.parse(cache);
+
+    return post({
+      url: "group/lessons",
+      data: {
+        publicationId,
+        groupId,
+        date: format(
+          startOfWeek(new Date(), { weekStartsOn: -6 }),
+          "yyyy-MM-dd",
+        ),
+      },
+    }).then(async (lessons) => {
+      await redisClient.set(`lessons-${groupId}`, JSON.stringify(lessons));
       redisClient.expire(`lessons-${groupId}`, 3600);
-      return getLessons;
-    }
-    return JSON.parse(cache);
+      return lessons;
+    });
   }
 }
