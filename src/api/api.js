@@ -3,7 +3,7 @@ import fetch from "node-fetch";
 import { createClient } from "redis";
 
 const redisClient = await createClient()
-  .on("error", (err) => console.log("Redis Client Error", err))
+  .on("error", (err) => console.error("Redis Client Error", err))
   .on("connect", () => console.log("Redis Client Connected"))
   .connect();
 
@@ -16,7 +16,7 @@ async function get(url) {
   return fetch(`${baseUrl}/${url}`)
     .then((res) => res.json())
     .then((json) => json)
-    .catch((err) => console.log(`API Error: ${err}`));
+    .catch((err) => console.error(`API Error: ${err}`));
 }
 
 async function post({ url, data }) {
@@ -29,7 +29,7 @@ async function post({ url, data }) {
   })
     .then((res) => res.json())
     .then((json) => json)
-    .catch((err) => console.log(`API Error: ${err}`));
+    .catch((err) => console.error(`API Error: ${err}`));
 }
 
 export default class {

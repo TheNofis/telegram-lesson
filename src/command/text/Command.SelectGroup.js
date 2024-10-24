@@ -38,7 +38,8 @@ export default class CommandSelect extends CommandClass {
           MenuMain,
         );
       })
-      .catch(() => {
+      .catch((err) => {
+        console.error(err);
         this.ctx.telegram.sendMessage(
           chatId,
           `❌ Ошибка\n\nℹ️ Не удалось сохранить группу`,
