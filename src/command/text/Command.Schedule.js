@@ -45,7 +45,10 @@ export default class CommandSelect extends CommandClass {
     this.ctx.telegram.sendMessage(
       chatId,
       renderTable(getForCurrentDay, currentDate),
-      MenuMain,
+      {
+        parse_mode: "markdown",
+        ...MenuMain,
+      },
     );
   }
 }
@@ -71,7 +74,7 @@ function renderTable(rows, date) {
     table.push(
       `┃ ${row.endTime}    ${row?.teachers?.map((e) => e.fio)?.join(" | ")}`,
     );
-    table.push(`┃ Каб.      ${row?.cabinet?.name}`);
+    table.push(`┃ Каб.      ${row?.cabinet?.name || "***Не указан***"}`);
     if (i != rows.length - 1) table.push("┣━━━━━━━━━━━━━━━━━━━━━━");
   }
 
