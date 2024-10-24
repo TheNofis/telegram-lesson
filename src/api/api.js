@@ -4,6 +4,7 @@ import { createClient } from "redis";
 
 const redisClient = await createClient()
   .on("error", (err) => console.log("Redis Client Error", err))
+  .on("connect", () => console.log("Redis Client Connected"))
   .connect();
 
 import { format, startOfWeek } from "date-fns";
