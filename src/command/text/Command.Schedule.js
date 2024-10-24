@@ -32,22 +32,22 @@ export default class CommandSelect extends CommandClass {
       });
 
     if (getForCurrentDay.length == 0)
-      return this.ctx.telegram.sendMessage(
-        chatId,
-        text == "📋 Расписание на завтра"
-          ? "ℹ️ Информация\n\n❌ Нет расписания на завтра"
-          : "ℹ️ Информация\n\n❌ Нет расписания на сегодня",
-        MenuMain,
-      );
+      return this.ctx.telegram
+        .sendMessage(
+          chatId,
+          text == "📋 Расписание на завтра"
+            ? "ℹ️ Информация\n\n❌ Нет расписания на завтра"
+            : "ℹ️ Информация\n\n❌ Нет расписания на сегодня",
+          MenuMain,
+        )
+        .catch((err) => console.error(err));
 
-    this.ctx.telegram.sendMessage(
-      chatId,
-      renderTable(getForCurrentDay, currentDate),
-      {
+    this.ctx.telegram
+      .sendMessage(chatId, renderTable(getForCurrentDay, currentDate), {
         parse_mode: "markdown",
         ...MenuMain,
-      },
-    );
+      })
+      .catch((err) => console.error(err));
   }
 }
 

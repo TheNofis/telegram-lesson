@@ -13,10 +13,12 @@ export default class CommandSelect extends CommandClass {
 
     if (text != "📚 Группы") return;
 
-    this.ctx.telegram.sendMessage(
-      chatId,
-      "ℹ️ Редактирования\n\n✅ Изменения вашей группы\n🔻 Выберите вашу группу снизу",
-      MenuSelectGroup.MenuSelectGroupBack,
-    );
+    this.ctx.telegram
+      .sendMessage(
+        chatId,
+        "ℹ️ Редактирования\n\n✅ Изменения вашей группы\n🔻 Выберите вашу группу снизу",
+        MenuSelectGroup.MenuSelectGroupBack,
+      )
+      .catch((err) => console.error(err));
   }
 }

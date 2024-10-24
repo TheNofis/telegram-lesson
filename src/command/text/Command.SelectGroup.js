@@ -22,10 +22,9 @@ export default class CommandSelect extends CommandClass {
       }) || null;
 
     if (findGroup == null)
-      return this.ctx.telegram.sendMessage(
-        chatId,
-        `❌ Ошибка\n\nℹ️ Группа ${content[1]} не найдена!`,
-      );
+      return this.ctx.telegram
+        .sendMessage(chatId, `❌ Ошибка\n\nℹ️ Группа ${content[1]} не найдена!`)
+        .catch((err) => console.error(err));
 
     this.user.groupId = findGroup.id;
     this.user.groupName = findGroup.name;

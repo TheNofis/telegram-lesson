@@ -12,6 +12,8 @@ export default class CommandSelect extends CommandClass {
 
     if (text != "↩️ Назад ↩️") return;
 
-    this.ctx.telegram.sendMessage(chatId, "ℹ️ Главное меню", MenuMain);
+    this.ctx.telegram
+      .sendMessage(chatId, "ℹ️ Главное меню", MenuMain)
+      .catch((err) => console.error(err));
   }
 }

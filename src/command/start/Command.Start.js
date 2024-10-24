@@ -24,11 +24,13 @@ export default class CommandSelect {
       newUser
         .save()
         .then(async () => {
-          this.ctx.telegram.sendMessage(
-            chatId,
-            "ℹ️ Регистрация\n\n✅ Для удобной работы в боте надо зарегистрироваться!\n🔻 Выберите вашу группу снизу",
-            MenuSelectGroup.MenuSelectGroupNoBack,
-          );
+          this.ctx.telegram
+            .sendMessage(
+              chatId,
+              "ℹ️ Регистрация\n\n✅ Для удобной работы в боте надо зарегистрироваться!\n🔻 Выберите вашу группу снизу",
+              MenuSelectGroup.MenuSelectGroupNoBack,
+            )
+            .catch((err) => console.error(err));
         })
         .catch((err) => {
           console.error(err);
