@@ -24,15 +24,14 @@ export default class CommandSelect extends CommandClass {
       currentDate.setDate(currentDate.getDate() + 1);
 
     const getForCurrentDay = lessons
-      .filter((lesson) => {
-        if (lesson.weekday == currentDate.getDay()) return lesson;
-      })
+      .filter((lesson) => lesson.weekday == currentDate.getDay())
       .sort((a, b) => {
         if (a.lesson > b.lesson) return 1;
         if (a.lesson < b.lesson) return -1;
         return 0;
       });
-    if (getForCurrentDay.length == 0) {
+
+    if (getForCurrentDay.length == 0)
       return this.ctx.telegram.sendMessage(
         chatId,
         text == "📋 Расписание на завтра"
@@ -40,7 +39,6 @@ export default class CommandSelect extends CommandClass {
           : "ℹ️ Информация\n\n❌ Нет расписания на сегодня",
         MenuMain,
       );
-    }
 
     this.ctx.telegram.sendMessage(
       chatId,
@@ -67,16 +65,14 @@ function renderTable(rows, date) {
   const table = [
     `┏━━━━━━━━━━━━━━━━━━━━━━\n┃ Дата:    ${format(date, "dd.MM.yy")} (${weekDay[date.getDay()]})\n┣━━━━━━━━━━━━━━━━━━━━━━`,
   ];
-
-  for (let i = 0; i < rows.length; i++) {
-    const row = rows[i];
+  rows.forEach((row, i) => {
     table.push(`┃ ${row.startTime}    ${maxLength(row?.subject?.name, 15)}`);
     table.push(
       `┃ ${row.endTime}    ${row?.teachers?.map((e) => e.fio)?.join(" | ")}`,
     );
     table.push(`┃ Каб.      ${row?.cabinet?.name || "***Не указан***"}`);
     if (i != rows.length - 1) table.push("┣━━━━━━━━━━━━━━━━━━━━━━");
-  }
+  });
 
   table.push("┗━━━━━━━━━━━━━━━━━━━━━━");
 
