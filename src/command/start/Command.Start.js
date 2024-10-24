@@ -18,7 +18,7 @@ export default class CommandSelect {
     if (findUser == null) {
       // NEW USER
       const newUser = new User({
-        username: this?.ctx?.update?.message?.from?.username,
+        username: this?.ctx?.update?.message?.from?.username || "<blank>",
         telegramId: chatId,
       });
       newUser
@@ -30,7 +30,8 @@ export default class CommandSelect {
             MenuSelectGroup.MenuSelectGroupNoBack,
           );
         })
-        .catch(() => {
+        .catch((err) => {
+          console.error(err);
           this.ctx.telegram.sendMessage(
             chatId,
             "❌ Ошибка регистрация\n\nℹ️ Не удалось зарегистрироваться!",
