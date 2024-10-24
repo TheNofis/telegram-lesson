@@ -23,27 +23,18 @@ class Bot {
       // new CallbackCommandInit(this.bot),
     ];
 
-    this.initCommandList.forEach((command) => {
-      command.handle();
-    });
+    this.initCommandList.forEach((command) => command.handle());
 
-    mongoose.set("strictQuery", false);
     mongoose
+      .set("strictQuery", false)
       .connect(this.mongoDBUrl)
-      .then(() => {
-        console.log("MongoDB connected");
-      })
-      .catch((err) => {
-        console.error("MongoDB not connected", err);
-      });
+      .then(() => console.log("MongoDB connected"))
+      .catch((err) => console.error("MongoDB not connected", err));
+
     this.bot
       .launch()
-      .then(() => {
-        console.log("Bot is ready");
-      })
-      .catch((err) => {
-        console.error("Bot is not ready", err);
-      });
+      .then(() => console.log("Bot is ready"))
+      .catch((err) => console.error("Bot is not ready", err));
   }
 }
 
