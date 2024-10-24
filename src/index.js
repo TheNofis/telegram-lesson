@@ -34,7 +34,7 @@ class Bot {
         console.log("MongoDB connected");
       })
       .catch((err) => {
-        console.log("MongoDB not connected", err);
+        console.error("MongoDB not connected", err);
       });
     this.bot
       .launch()
@@ -42,7 +42,7 @@ class Bot {
         console.log("Bot is ready");
       })
       .catch((err) => {
-        console.log("Bot is not ready", err);
+        console.error("Bot is not ready", err);
       });
   }
 }
