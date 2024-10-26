@@ -6,6 +6,8 @@ import CommandProfile from "../text/Command.Profile.js";
 import CommandChangeGroup from "../text/Command.ChangeGroup.js";
 import CommandMainMenu from "../text/Command.MainMenu.js";
 import CommandSchedule from "../text/Command.Schedule.js";
+import CommandSelectWeekDay from "../text/Comamnd.SelectWeekDay.js";
+import CommandScheduleForWeekDay from "../text/Command.ScheduleForWeekDay.js";
 
 export default class {
   constructor(bot) {
@@ -36,6 +38,8 @@ export default class {
         new CommandChangeGroup(payload),
         new CommandMainMenu(payload),
         new CommandSchedule(payload),
+        new CommandSelectWeekDay(payload),
+        new CommandScheduleForWeekDay(payload),
       ];
       this.initCommandList.forEach((command) => command.handle());
     });
