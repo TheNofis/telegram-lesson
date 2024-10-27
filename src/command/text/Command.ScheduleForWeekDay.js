@@ -30,7 +30,7 @@ export default class CommandSelect extends CommandClass {
 
     const currentDate = new Date();
     const selectWeekDay = weekDays.indexOf(selectWeekDayWord);
-    currentDate.setDate(currentDate.getDate() + selectWeekDay + 1);
+    currentDate.setDate(currentDate.getDate() + selectWeekDay);
 
     const lessons = (await api.lessons(this.user.groupId)).lessons;
 
