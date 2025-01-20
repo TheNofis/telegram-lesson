@@ -17,6 +17,7 @@ export default class {
   handle() {
     this.bot.on("text", async (ctx) => {
       const chatId = ctx?.update?.message?.chat?.id;
+      //TODO: add redis
       const findUser = await User.findOne({
         telegramId: chatId,
       });

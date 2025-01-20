@@ -12,7 +12,7 @@ export default class CommandSelect {
     const chatId = this?.ctx?.update?.message?.chat?.id;
 
     if (text != "/start") return;
-
+    // TODO: add redis
     const findUser = await User.findOne({ telegramId: chatId });
 
     if (findUser == null) {
