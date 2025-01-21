@@ -41,8 +41,7 @@ export default class {
         new CommandSelectWeekDay(payload),
         new CommandScheduleForWeekDay(payload),
       ];
-      // TODO:
-      // this.initAdminCommandList = findUser.role == "admin" && [new CommandAdmin(payload)];
+
       this.initCommandList.forEach((command) => command.handle());
     });
   }
