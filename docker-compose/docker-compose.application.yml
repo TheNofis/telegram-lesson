@@ -3,6 +3,7 @@ services:
     image: node:latest
     container_name: telegram-bot
     working_dir: /usr/src/app
+    command: ["npm", "run", "start"]
     volumes:
       - ../:/usr/src/app
     environment:
