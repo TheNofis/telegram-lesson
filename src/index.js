@@ -1,11 +1,12 @@
 import * as dotenv from "dotenv";
 import { Telegraf } from "telegraf";
 
+import "./db/connect/mongodb.js";
+
 import InitStartCommand from "./command/init/Init.StartCommand.js";
 import InitTextCommand from "./command/init/Init.TextCommands.js";
 // import CallbackCommandInit from "./CallbackCommandInit.js";
 
-import "./db/connect/mongodb.js";
 dotenv.config();
 
 const token = process.env.BOT_TOKEN;
