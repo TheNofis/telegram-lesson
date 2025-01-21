@@ -2,6 +2,7 @@ import CommandClass from "./Command.Class.js";
 import Api from "../../api/api.js";
 
 import MenuMain from "../../menu/Menu.Main.js";
+import User from "../../db/model/User.js";
 
 export default class CommandSelect extends CommandClass {
   async handle() {
@@ -25,10 +26,10 @@ export default class CommandSelect extends CommandClass {
         )
         .catch((err) => console.error(err));
 
-    this.user.groupId = findGroup.id;
-    this.user.groupName = findGroup.name;
-    this.user
-      .save()
+    User.findOneAndUpdate(
+      { telegramId: this.user.telegramId },
+      { $set: { groupId: findGroup.id, groupName: findGroup.name } },
+    )
       .then(() => {
         this.ctx.telegram.sendMessage(
           this.chatId,

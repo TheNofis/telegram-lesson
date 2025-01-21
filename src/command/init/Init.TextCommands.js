@@ -24,7 +24,8 @@ export default class {
 
       // Cache
       const cacheUser = await redisClient.get(`user:${userId}`);
-      if (cacheUser !== "null") this.user = JSON.parse(cacheUser);
+      if (cacheUser !== null && cacheUser !== undefined && cacheUser !== "null")
+        this.user = JSON.parse(cacheUser);
       else {
         this.user = await User.findOne({ telegramId: userId });
         redisClient
