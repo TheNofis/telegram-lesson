@@ -1,11 +1,6 @@
 import fetch from "node-fetch";
 
-import { createClient } from "redis";
-
-const redisClient = await createClient()
-  .on("error", (err) => console.error("Redis Client Error", err))
-  .on("connect", () => console.log("Redis Client Connected"))
-  .connect();
+import redisClient from "./redis.js";
 
 import { format, startOfWeek } from "date-fns";
 
