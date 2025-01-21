@@ -4,15 +4,11 @@ import Api from "../../api/api.js";
 import MenuMain from "../../menu/Menu.Main.js";
 
 export default class CommandSelect extends CommandClass {
-  constructor(props) {
-    super(props);
-  }
   async handle() {
-    const text = this?.ctx?.update?.message?.text;
-    const chatId = this?.ctx?.update?.message?.chat?.id;
+    if (this.text == "📚 Группы") return;
 
-    const content = text.split(" ");
-    if (text == "📚 Группы") return;
+    const content = this.text.split(" ");
+
     if (content[0] != "📚") return;
     const getGroupList = await Api.groups();
 
@@ -23,7 +19,10 @@ export default class CommandSelect extends CommandClass {
 
     if (findGroup == null)
       return this.ctx.telegram
-        .sendMessage(chatId, `❌ Ошибка\n\nℹ️ Группа ${content[1]} не найдена!`)
+        .sendMessage(
+          this.chatId,
+          `❌ Ошибка\n\nℹ️ Группа ${content[1]} не найдена!`,
+        )
         .catch((err) => console.error(err));
 
     this.user.groupId = findGroup.id;
@@ -32,7 +31,7 @@ export default class CommandSelect extends CommandClass {
       .save()
       .then(() => {
         this.ctx.telegram.sendMessage(
-          chatId,
+          this.chatId,
           `✅ Группа ${content[1]} успешно выбрана!`,
           MenuMain,
         );
@@ -40,7 +39,7 @@ export default class CommandSelect extends CommandClass {
       .catch((err) => {
         console.error(err);
         this.ctx.telegram.sendMessage(
-          chatId,
+          this.chatId,
           `❌ Ошибка\n\nℹ️ Не удалось сохранить группу`,
         );
       });

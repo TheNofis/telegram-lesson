@@ -16,16 +16,12 @@ const weekDays = [
 ];
 
 export default class CommandSelect extends CommandClass {
-  constructor(props) {
-    super(props);
-  }
   async handle() {
-    const text = this?.ctx?.update?.message?.text;
-    const chatId = this?.ctx?.update?.message?.chat?.id;
-
-    const selectWeekDayWord = text
+    // TODO
+    const selectWeekDayWord = this.text
       .replace("📋 Расписание на ", "")
       .split(" ")[0];
+
     if (!weekDays.includes(selectWeekDayWord)) return;
 
     const currentDate = new Date();
@@ -45,14 +41,14 @@ export default class CommandSelect extends CommandClass {
     if (getForCurrentDay.length == 0)
       return this.ctx.telegram
         .sendMessage(
-          chatId,
+          this.chatId,
           `ℹ️ Информация\n\n❌ Нет расписания на ${selectWeekDayWord}`,
           MenuMain,
         )
         .catch((err) => console.error(err));
 
     this.ctx.telegram
-      .sendMessage(chatId, renderTable(getForCurrentDay, currentDate), {
+      .sendMessage(this.chatId, renderTable(getForCurrentDay, currentDate), {
         parse_mode: "markdown",
         ...MenuMain,
       })

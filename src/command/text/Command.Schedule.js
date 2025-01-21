@@ -6,21 +6,19 @@ import MenuMain from "../../menu/Menu.Main.js";
 import { format } from "date-fns";
 
 export default class CommandSelect extends CommandClass {
-  constructor(props) {
-    super(props);
-  }
   async handle() {
-    const text = this?.ctx?.update?.message?.text;
-    const chatId = this?.ctx?.update?.message?.chat?.id;
-
     if (
-      !(text == "📋 Расписание на сегодня" || text == "📋 Расписание на завтра")
+      !(
+        this.text == "📋 Расписание на сегодня" ||
+        this.text == "📋 Расписание на завтра"
+      )
     )
       return;
-    const lessons = (await api.lessons(this.user.groupId)).lessons;
 
+    const lessons = (await api.lessons(this.user.groupId)).lessons;
     const currentDate = new Date();
-    if (text == "📋 Расписание на завтра")
+
+    if (this.text == "📋 Расписание на завтра")
       currentDate.setDate(currentDate.getDate() + 1);
 
     const getForCurrentDay = lessons
@@ -34,8 +32,8 @@ export default class CommandSelect extends CommandClass {
     if (getForCurrentDay.length == 0)
       return this.ctx.telegram
         .sendMessage(
-          chatId,
-          text == "📋 Расписание на завтра"
+          this.chatId,
+          this.text == "📋 Расписание на завтра"
             ? "ℹ️ Информация\n\n❌ Нет расписания на завтра"
             : "ℹ️ Информация\n\n❌ Нет расписания на сегодня",
           MenuMain,
@@ -43,7 +41,7 @@ export default class CommandSelect extends CommandClass {
         .catch((err) => console.error(err));
 
     this.ctx.telegram
-      .sendMessage(chatId, renderTable(getForCurrentDay, currentDate), {
+      .sendMessage(this.chatId, renderTable(getForCurrentDay, currentDate), {
         parse_mode: "markdown",
         ...MenuMain,
       })
