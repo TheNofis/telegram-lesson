@@ -2,7 +2,8 @@
 
 import mongoose from "mongoose";
 
-export default function mongoConnect(uri) {
+export default function mongoConnect() {
+  const uri = process.env.MONGODB_URI || "mongodb://localhost:27017";
   return mongoose
     .set("strictQuery", false)
     .connect(uri)

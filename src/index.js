@@ -27,7 +27,7 @@ class Bot {
 
     this.initCommandList.forEach((command) => command.handle());
 
-    mongoConnect(this.mongoDBUrl);
+    mongoConnect();
     this.bot
       .launch()
       .then(() => console.log("Bot is ready"))
