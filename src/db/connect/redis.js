@@ -1,6 +1,9 @@
 // Модуль кеширования
 
 import { createClient } from "redis";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 const redisUrl = process.env.REDIS_URL || "redis://server.thenofis.ru:6379";
 const redisClient = await createClient({

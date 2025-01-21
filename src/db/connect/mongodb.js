@@ -1,12 +1,15 @@
 // Модуль подключения к БД
 
 import mongoose from "mongoose";
+import dotenv from "dotenv";
 
-export default function mongoConnect() {
-  const uri = process.env.MONGODB_URI || "mongodb://localhost:27017";
-  return mongoose
-    .set("strictQuery", false)
-    .connect(uri)
-    .then(() => console.log("MongoDB connected"))
-    .catch((err) => console.error("MongoDB not connected", err));
-}
+dotenv.config();
+const mongoUrl = process.env.MONGODB_URI || "mongodb://localhost:27017";
+
+const mongoClient = mongoose
+  .set("strictQuery", false)
+  .connect(mongoUrl)
+  .then(() => console.log("MongoDB connected"))
+  .catch((err) => console.error("MongoDB not connected", err));
+
+export default mongoClient;
