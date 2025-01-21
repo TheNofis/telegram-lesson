@@ -6,6 +6,7 @@ import InitStartCommand from "./command/init/Init.StartCommand.js";
 import InitTextCommand from "./command/init/Init.TextCommands.js";
 // import CallbackCommandInit from "./CallbackCommandInit.js";
 
+import mongoConnect from "./db/connect/mongodb.js";
 dotenv.config();
 
 const token = process.env.BOT_TOKEN;
@@ -26,12 +27,7 @@ class Bot {
 
     this.initCommandList.forEach((command) => command.handle());
 
-    mongoose
-      .set("strictQuery", false)
-      .connect(this.mongoDBUrl)
-      .then(() => console.log("MongoDB connected"))
-      .catch((err) => console.error("MongoDB not connected", err));
-
+    mongoConnect(this.mongoDBUrl);
     this.bot
       .launch()
       .then(() => console.log("Bot is ready"))
