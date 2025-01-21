@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="https://i.ibb.co/ZH2qP9D/photo-2024-10-24-16-11-06.jpg" alt="Логотип бота" width="100" height="100" style="border-radius: 50%;">
+  <img src="https://i.ibb.co/HgDkTpk/image.png" alt="Логотип бота" width="200" height="200">
   <h1>telegram-lesson</h1>
   <p>
     <a href="https://github.com/TheNofis/telegram-lesson/stargazers">
