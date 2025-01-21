@@ -1,8 +1,18 @@
-# telegram-lesson
-
-[![GitHub stars](https://img.shields.io/github/stars/TheNofis/telegram-lesson?style=social)](https://github.com/TheNofis/telegram-lesson/stargazers)
-[![GitHub forks](https://img.shields.io/github/forks/TheNofis/telegram-lesson?style=social)](https://github.com/TheNofis/telegram-lesson/network/members)
-[![GitHub issues](https://img.shields.io/github/issues/TheNofis/telegram-lesson)](https://github.com/TheNofis/telegram-lesson/issues)
+<div align="center">
+  <img src="https://i.ibb.co/ZH2qP9D/photo-2024-10-24-16-11-06.jpg" alt="Логотип бота" width="100" height="100" style="border-radius: 50%;">
+  <h1>telegram-lesson</h1>
+  <p>
+    <a href="https://github.com/TheNofis/telegram-lesson/stargazers">
+      <img src="https://img.shields.io/github/stars/TheNofis/telegram-lesson?style=social" alt="GitHub stars">
+    </a>
+    <a href="https://github.com/TheNofis/telegram-lesson/network/members">
+      <img src="https://img.shields.io/github/forks/TheNofis/telegram-lesson?style=social" alt="GitHub forks">
+    </a>
+    <a href="https://github.com/TheNofis/telegram-lesson/issues">
+      <img src="https://img.shields.io/github/issues/TheNofis/telegram-lesson" alt="GitHub issues">
+    </a>
+  </p>
+</div>
 
 ## Описание
 
