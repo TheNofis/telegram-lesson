@@ -39,6 +39,7 @@
 
    - `BOT_TOKEN`: Токен вашего Telegram бота.
    - `MONGODB_URI`: URI вашей MongoDB базы данных.
+   - `REDIS_URL`: URL вашего Redis сервера.
 
 <br/>
 
@@ -86,16 +87,22 @@
   ```javascript
   // Пример redis.js
 
-  // Да...
+  // Получение значений из environment или задание значения по умолчанию
+  const redisUrl = process.env.REDIS_URL || "redis://server.thenofis.ru:6379";
+
+  const redisClient = await createClient({
+    url: redisUrl,
+  })
+    // Обработка ошибок и подключение
+    .on("error", (err) => console.log("Redis Client Error", err))
+    .on("ready", () => console.log("Redis good connect"))
+    .connect();
   ```
 
 - **api.js**: Файл который служит прослойкой для удобного взаимодействия с API расписания колледжа. Этот слой упрощает процесс отправки запросов к API и обработки ответов.
 
   ```javascript
   // Пример api.js
-
-  // Подключение к Redis
-  const redisClient = ...
 
   // Запросы GET / POST
   async function get(url) {...}
