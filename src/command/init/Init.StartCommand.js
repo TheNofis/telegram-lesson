@@ -7,7 +7,11 @@ export default class {
   }
   handle() {
     this.bot.start((ctx) => {
-      const startCommand = new CommandStart(this.bot, ctx);
+      const payload = {
+        bot: this.bot,
+        ctx: ctx,
+      };
+      const startCommand = new CommandStart(payload);
       startCommand.handle();
     });
   }
