@@ -82,23 +82,6 @@
 
 Директория `api` содержит файлы, которые отвечают за связь с внешними сервисами
 
-- **redis.js**: Файл нужный для создания подключения к redis, для последующего переиспользования соединения и кеширования данных
-
-  ```javascript
-  // Пример redis.js
-
-  // Получение значений из environment или задание значения по умолчанию
-  const redisUrl = process.env.REDIS_URL || "redis://server.thenofis.ru:6379";
-
-  const redisClient = await createClient({
-    url: redisUrl,
-  })
-    // Обработка ошибок и подключение
-    .on("error", (err) => console.log("Redis Client Error", err))
-    .on("ready", () => console.log("Redis good connect"))
-    .connect();
-  ```
-
 - **api.js**: Файл который служит прослойкой для удобного взаимодействия с API расписания колледжа. Этот слой упрощает процесс отправки запросов к API и обработки ответов.
 
   ```javascript
@@ -178,6 +161,45 @@
 ### 3. Модели Базы Данных
 
 Директория `db` определяет модели MongoDB, используемые ботом. Эти модели структурируют данные, хранящиеся в базе данных, обеспечивая эффективное извлечение и управление информацией пользователей.
+Так-же в этой директории находятся файлы для удобного подключения к базам данных, такми как **redis** **mongoose**
+
+- **connect** Директория с файлами для подключения к базам данных
+
+  - **redis.js**: Файл для подключения к базе данных Redis.
+
+    ```javascript
+    // Пример redis.js
+
+    // Получение значений из environment или задание значения по умолчанию
+    const redisUrl = process.env.REDIS_URL || "redis://server.thenofis.ru:6379";
+
+    const redisClient = await createClient({
+      url: redisUrl,
+    })
+      // Обработка ошибок и подключение
+      .on("error", (err) => console.log("Redis Client Error", err))
+      .on("ready", () => console.log("Redis good connect"))
+      .connect();
+
+    export default redisClient;
+    ```
+
+  - **mongoose.js**: Файл для подключения к базе данных MongoDB.
+
+    ```javascript
+    // Пример mongoose.js
+
+    const mongoUrl = process.env.MONGODB_URI || "mongodb://localhost:27017";
+
+    const mongoClient = mongoose
+      .set("strictQuery", false)
+      // Обработка ошибок и подключение
+      .connect(mongoUrl)
+      .then(() => console.log("MongoDB connected"))
+      .catch((err) => console.error("MongoDB not connected", err));
+
+    export default mongoClient;
+    ```
 
 ### 4. Главный Исполняемый Файл
 
@@ -185,6 +207,9 @@
 
 ```javascript
 // Пример index.js
+
+// Подключение к базе данных
+import "./db/connect/mongodb.js";
 
 // Импорт инициализаторов обработчиков
 import InitExampleCommand from "./command/init/Init.ExampleCommand.js";
@@ -194,7 +219,6 @@ class Bot {
   constructor(props) {
     this.bot = {...};
     this.initCommandList = [...];
-    this.mongoDBUrl = ...;
   }
 
   init() {
