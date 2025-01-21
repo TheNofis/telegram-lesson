@@ -2,8 +2,8 @@ import * as dotenv from "dotenv";
 import { Telegraf } from "telegraf";
 import mongoose from "mongoose";
 
-import StartCommandInit from "./command/init/StartCommand.Init.js";
-import TextCommandInit from "./command/init/TextCommand.Init.js";
+import InitStartCommand from "./command/init/Init.StartCommand.js";
+import InitTextCommand from "./command/init/Init.TextCommands.js";
 // import CallbackCommandInit from "./CallbackCommandInit.js";
 
 dotenv.config();
@@ -17,9 +17,10 @@ class Bot {
     this.mongoDBUrl = mongodbUrl;
   }
   init() {
+    const payload = this.bot;
     this.initCommandList = [
-      new StartCommandInit(this.bot),
-      new TextCommandInit(this.bot),
+      new InitStartCommand(payload),
+      new InitTextCommand(payload),
       // new CallbackCommandInit(this.bot),
     ];
 
