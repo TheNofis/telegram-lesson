@@ -17,7 +17,6 @@ const weekDays = [
 
 export default class CommandSelect extends CommandClass {
   async handle() {
-    // TODO
     const selectWeekDayWord = this.text
       .replace("📋 Расписание на ", "")
       .split(" ")[0];
