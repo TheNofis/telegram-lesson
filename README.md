@@ -201,6 +201,23 @@
     export default mongoClient;
     ```
 
+- **model** Директория с моделями базы данных
+
+  - **User.js**: Модель пользователя.
+
+  ```javascript
+  // Пример User.js
+
+  const User = new Schema({
+    id: { type: String, default: v4(), required: true, unique: true },
+    username: { type: String, required: true },
+    telegramId: { type: Number, required: true },
+    createdAt: { type: Number, default: Date.now },
+    groupName: { type: String, default: null },
+    groupId: { type: Number, default: null },
+  });
+  ```
+
 ### 4. Главный Исполняемый Файл
 
 Файл `index.js` является главным исполняемым файлом. Он служит точкой входа для приложения, инициализируя бота и настраивая необходимые конфигурации.
