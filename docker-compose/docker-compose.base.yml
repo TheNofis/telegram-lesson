@@ -1,0 +1,3 @@
+networks:
+  telegram_lesson_network:
+    driver: bridge

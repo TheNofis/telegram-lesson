@@ -1,0 +1,15 @@
+services:
+  telegram-bot:
+    image: node:latest
+    container_name: telegram-bot
+    working_dir: /usr/src/app
+    volumes:
+      - ../:/usr/src/app
+    environment:
+      - TZ=Europe/Moscow
+    depends_on:
+      - mongodb
+      - redis
+    restart: always
+    networks:
+      - telegram_lesson_network
