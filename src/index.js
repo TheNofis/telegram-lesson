@@ -10,6 +10,7 @@ dotenv.config();
 
 const token = process.env.BOT_TOKEN;
 const mongodbUrl = process.env.MONGODB_URI;
+
 class Bot {
   constructor(props) {
     this.bot = new Telegraf(props.BOT_TOKEN);

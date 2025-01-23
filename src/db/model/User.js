@@ -8,6 +8,7 @@ const User = new Schema({
   createdAt: { type: Number, default: Date.now },
   groupName: { type: String, default: null },
   groupId: { type: Number, default: null },
+  role: { type: String, default: "user" },
   // TODO: add role / roles (на выбор, что получится)
   // Отличие:
   // role - String

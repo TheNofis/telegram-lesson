@@ -9,6 +9,9 @@ import CommandSchedule from "../text/Command.Schedule.js";
 import CommandSelectWeekDay from "../text/Comamnd.SelectWeekDay.js";
 import CommandScheduleForWeekDay from "../text/Command.ScheduleForWeekDay.js";
 
+import CommandCreateInvite from "../text/Command.CreateInvite.js";
+import CommandAcceptInvite from "../text/Command.AcceptInvite.js";
+
 export default class {
   constructor(bot) {
     this.bot = bot;
@@ -40,6 +43,8 @@ export default class {
         new CommandSchedule(payload),
         new CommandSelectWeekDay(payload),
         new CommandScheduleForWeekDay(payload),
+        new CommandCreateInvite(payload),
+        new CommandAcceptInvite(payload),
       ];
       // TODO:
       // this.initAdminCommandList = findUser.role == "admin" && [new CommandAdmin(payload)];
