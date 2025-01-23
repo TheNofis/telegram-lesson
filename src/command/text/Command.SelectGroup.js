@@ -31,14 +31,31 @@ export default class CommandSelect extends CommandClass {
       { telegramId: this.user.telegramId },
       { $set: { groupId: findGroup.id, groupName: findGroup.name } },
     )
-      .lean()
-      .then((user) => {
-        redisClient.del(`user:${user.telegramId}`);
-        this.ctx.telegram.sendMessage(
-          this.chatId,
-          `✅ Группа ${content[1]} успешно выбрана!`,
-          MenuMain,
-        );
+      .then(() => {
+        redisClient
+          .del(`user:${this.user.telegramId}`)
+          .then(() => {
+            this.ctx.telegram
+              .sendMessage(
+                this.chatId,
+                `✅ Группа ${content[1]} успешно выбрана!`,
+                MenuMain,
+              )
+              .catch((err) => {
+                console.error(err);
+                this.ctx.telegram.sendMessage(
+                  this.chatId,
+                  `❌ Ошибка\n\nℹ️ Не удалось сохранить группу`,
+                );
+              });
+          })
+          .catch((err) => {
+            console.error(err);
+            this.ctx.telegram.sendMessage(
+              this.chatId,
+              `❌ Ошибка\n\nℹ️ Не удалось сохранить группу`,
+            );
+          });
       })
       .catch((err) => {
         console.error(err);
