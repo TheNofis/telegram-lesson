@@ -209,12 +209,13 @@
   // Пример User.js
 
   const User = new Schema({
-    id: { type: String, default: v4(), required: true, unique: true },
-    username: { type: String, required: true },
-    telegramId: { type: Number, required: true },
-    createdAt: { type: Number, default: Date.now },
-    groupName: { type: String, default: null },
-    groupId: { type: Number, default: null },
+    id: { type: String, default: v4(), required: true, unique: true }, // UUID пользователя внутри бота
+    username: { type: String, required: true }, // username в телеграме
+    telegramId: { type: Number, required: true }, // id пользователя в телеграме
+    createdAt: { type: Number, default: Date.now }, // Дата создания пользователя
+    groupName: { type: String, default: null }, // Название группы
+    groupId: { type: Number, default: null }, // ID группы
+    table: { type: Boolean, default: 0 }, // Тип отправляемой таблицы 0 - TEXT, 1 - IMAGE
   });
   ```
 
@@ -260,7 +261,48 @@ const bot = new Bot({ BOT_TOKEN: token, MONGODB_URL: mongodbUrl });
 bot.init();
 ```
 
-### 5. Структуры Меню
+### 5. Шаблоны HTML
+
+Директория `html` шаблон html для создания таблицы расписания, в будующем планируется добавления нескольких тем.
+
+- **table.html** - Самый простой шаблон для создания таблицы расписания
+
+  ```html
+  <!--   Пример table.html -->
+
+  <!doctype html>
+  <html lang="en">
+    <head>
+      <meta charset="UTF-8" />
+      <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    </head>
+    <body>
+      <table class="table-lessons">
+        <thead>
+          <tr>
+            <th class="time">#</th>
+            <th class="caption-lessons">Занятия</th>
+          </tr>
+        </thead>
+        <tbody>
+          {CONTENT}
+        </tbody>
+      </table>
+    </body>
+    <style>
+      body {
+        display: table;
+
+        margin: 0;
+        padding: 0;
+      }
+      /* СТИЛИ .... */
+    </style>
+  </html>
+  ```
+
+### 6. Структуры Меню
 
 Директория `menu` содержит структуры меню для бота, предоставляя способ представить опции и навигацию по различным разделам бота.
 
@@ -278,6 +320,97 @@ export default Markup.keyboard([
   .oneTime()
   .resize();
 ```
+
+### 7. Вспомогательные Компоненты
+
+Директория `utils` файлы, которые служат для упрощения работы с таблицами.
+
+- **createTable.js** - Функция для создания таблицы расписания PHOTO/TEXT
+
+  ```javascript
+  // Пример createTable.js
+
+  import { readFileSync } from "fs";
+  import { format } from "date-fns";
+  import nodeHtmlToBuffer from "node-html-to-image";
+
+  const table = readFileSync("./src/html/table.html", "utf-8");
+  // День недели
+  const weekDay = [...];
+
+  const createPhotoTable = async (rows, date) => {
+    const trs = rows.map((row) => {
+      const { startTime, endTime, subject, teachers, cabinet } = row;
+      return createTr(
+        startTime,
+        endTime,
+        subject?.name,
+        teachers?.map((e) => e.fio)?.join(" | "),
+        cabinet?.name || "Не указан",
+      );
+    });
+    const content = table.replace("{CONTENT}", trs.join("\n"));
+    const buffer = await nodeHtmlToBuffer({
+      html: content,
+      options: {
+        format: "png",
+      },
+    });
+    return {
+      buffer,
+      caption: `Расписание на ${format(date, "dd.MM.yy")} (${weekDay[date.getDay()]})`,
+    };
+  };
+
+  const createTextTable = (rows, date) => {
+    const table = [
+      `┏━━━━━━━━━━━━━━━━━━━━━━\n┃ Дата:    ${format(date, "dd.MM.yy")} (${weekDay[date.getDay()]})\n┣━━━━━━━━━━━━━━━━━━━━━━`,
+    ];
+    rows.forEach((row, i) => {
+      const { startTime, endTime, subject, teachers, cabinet } = row;
+      table.push(`┃ ${startTime}    ${maxLength(subject?.name, 15)}`);
+      table.push(`┃ ${endTime}    ${teachers?.map((e) => e.fio)?.join(" | ")}`);
+      table.push(`┃ Каб.      ${cabinet?.name || "***Не указан***"}`);
+      if (i != rows.length - 1) table.push("┣━━━━━━━━━━━━━━━━━━━━━━");
+    });
+
+    table.push("┗━━━━━━━━━━━━━━━━━━━━━━");
+
+    return table.join("\n");
+  };
+
+  // Создание строк таблиц для createTextTable
+  function createTr(startTime, endTime, lesson, teacher, cabinet) {
+    if (lesson)
+      return `<tr>
+      <td class="time">
+        <div>${startTime}</div>
+        <div>${endTime}</div>
+      </td>
+      <td>
+        <div class="row-lessons">
+          <span>${lesson}</span>
+          <span>${teacher}</span>
+          <span>${cabinet}</span>
+        </div>
+      </td>
+    </tr>`;
+    else
+      return `<tr>
+      <td class="time">
+        <div>${startTime}</div>
+        <div>${endTime}</div>
+      </td>
+    </tr>`;
+  }
+  // Максимальная длина строки
+  function maxLength(word, length) {
+    if (word.length > length) return word.slice(0, length) + "...";
+    return word;
+  }
+
+  export { createTextTable, createPhotoTable };
+  ```
 
 <br/>
 <br/>
