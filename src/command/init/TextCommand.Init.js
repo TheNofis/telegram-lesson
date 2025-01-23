@@ -8,34 +8,22 @@ import CommandMainMenu from "../text/Command.MainMenu.js";
 import CommandSchedule from "../text/Command.Schedule.js";
 import CommandSelectWeekDay from "../text/Comamnd.SelectWeekDay.js";
 import CommandScheduleForWeekDay from "../text/Command.ScheduleForWeekDay.js";
+
 import CommandCreateInvite from "../text/Command.CreateInvite.js";
 import CommandAcceptInvite from "../text/Command.AcceptInvite.js";
-
-import redisClient from "../../db/connect/redis.js";
 
 export default class {
   constructor(bot) {
     this.bot = bot;
-    this.user = null;
     this.initCommandList = [];
   }
   handle() {
     this.bot.on("text", async (ctx) => {
       const chatId = ctx?.update?.message?.chat?.id;
-      const userId = ctx?.update?.message?.from?.id;
-
-      // Cache
-      const cacheUser = await redisClient.get(`user:${userId}`);
-      if (cacheUser !== null && cacheUser !== undefined && cacheUser !== "null")
-        this.user = JSON.parse(cacheUser);
-      else {
-        this.user = await User.findOne({ telegramId: userId });
-        redisClient
-          .set(`user:${userId}`, JSON.stringify(this.user), { EX: 600 })
-          .catch((err) => console.error(`TextCommad.Init.js: ${err}`));
-      }
-
-      if (this.user == null)
+      const findUser = await User.findOne({
+        telegramId: chatId,
+      });
+      if (findUser == null)
         return ctx.telegram.sendMessage(
           chatId,
           `❌ Ошибка\n\nℹ️ Пользователь не зарегистрирован!`,
@@ -43,8 +31,8 @@ export default class {
 
       const payload = {
         bot: this.bot,
-        user: this.user,
         ctx: ctx,
+        user: findUser,
       };
 
       this.initCommandList = [
@@ -58,7 +46,8 @@ export default class {
         new CommandCreateInvite(payload),
         new CommandAcceptInvite(payload),
       ];
-
+      // TODO:
+      // this.initAdminCommandList = findUser.role == "admin" && [new CommandAdmin(payload)];
       this.initCommandList.forEach((command) => command.handle());
     });
   }
