@@ -3,6 +3,7 @@ import Api from "../../api/api.js";
 
 import MenuMain from "../../menu/Menu.Main.js";
 import User from "../../db/model/User.js";
+import redisClient from "../../db/connect/redis.js";
 
 export default class CommandSelect extends CommandClass {
   async handle() {
@@ -30,7 +31,9 @@ export default class CommandSelect extends CommandClass {
       { telegramId: this.user.telegramId },
       { $set: { groupId: findGroup.id, groupName: findGroup.name } },
     )
-      .then(() => {
+      .lean()
+      .then((user) => {
+        redisClient.del(`user:${user.telegramId}`);
         this.ctx.telegram.sendMessage(
           this.chatId,
           `✅ Группа ${content[1]} успешно выбрана!`,
