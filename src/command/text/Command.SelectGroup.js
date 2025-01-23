@@ -2,17 +2,15 @@ import CommandClass from "./Command.Class.js";
 import Api from "../../api/api.js";
 
 import MenuMain from "../../menu/Menu.Main.js";
+import User from "../../db/model/User.js";
+import redisClient from "../../db/connect/redis.js";
 
 export default class CommandSelect extends CommandClass {
-  constructor(props) {
-    super(props);
-  }
   async handle() {
-    const text = this?.ctx?.update?.message?.text;
-    const chatId = this?.ctx?.update?.message?.chat?.id;
+    if (this.text == "📚 Группы") return;
 
-    const content = text.split(" ");
-    if (text == "📚 Группы") return;
+    const content = this.text.split(" ");
+
     if (content[0] != "📚") return;
     const getGroupList = await Api.groups();
 
@@ -23,24 +21,46 @@ export default class CommandSelect extends CommandClass {
 
     if (findGroup == null)
       return this.ctx.telegram
-        .sendMessage(chatId, `❌ Ошибка\n\nℹ️ Группа ${content[1]} не найдена!`)
+        .sendMessage(
+          this.chatId,
+          `❌ Ошибка\n\nℹ️ Группа ${content[1]} не найдена!`,
+        )
         .catch((err) => console.error(err));
 
-    this.user.groupId = findGroup.id;
-    this.user.groupName = findGroup.name;
-    this.user
-      .save()
+    User.findOneAndUpdate(
+      { telegramId: this.user.telegramId },
+      { $set: { groupId: findGroup.id, groupName: findGroup.name } },
+    )
       .then(() => {
-        this.ctx.telegram.sendMessage(
-          chatId,
-          `✅ Группа ${content[1]} успешно выбрана!`,
-          MenuMain,
-        );
+        redisClient
+          .del(`user:${this.user.telegramId}`)
+          .then(() => {
+            this.ctx.telegram
+              .sendMessage(
+                this.chatId,
+                `✅ Группа ${content[1]} успешно выбрана!`,
+                MenuMain,
+              )
+              .catch((err) => {
+                console.error(err);
+                this.ctx.telegram.sendMessage(
+                  this.chatId,
+                  `❌ Ошибка\n\nℹ️ Не удалось сохранить группу`,
+                );
+              });
+          })
+          .catch((err) => {
+            console.error(err);
+            this.ctx.telegram.sendMessage(
+              this.chatId,
+              `❌ Ошибка\n\nℹ️ Не удалось сохранить группу`,
+            );
+          });
       })
       .catch((err) => {
         console.error(err);
         this.ctx.telegram.sendMessage(
-          chatId,
+          this.chatId,
           `❌ Ошибка\n\nℹ️ Не удалось сохранить группу`,
         );
       });

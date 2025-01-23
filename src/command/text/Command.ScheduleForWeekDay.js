@@ -3,8 +3,6 @@ import CommandClass from "./Command.Class.js";
 import api from "../../api/api.js";
 import MenuMain from "../../menu/Menu.Main.js";
 
-import { format } from "date-fns";
-
 const weekDays = [
   "воскресенье",
   "понедельник",
@@ -15,25 +13,27 @@ const weekDays = [
   "субботу",
 ];
 
-export default class CommandSelect extends CommandClass {
-  constructor(props) {
-    super(props);
-  }
-  async handle() {
-    const text = this?.ctx?.update?.message?.text;
-    const chatId = this?.ctx?.update?.message?.chat?.id;
+import { createTextTable, createPhotoTable } from "../../utils/createTable.js";
 
-    const selectWeekDayWord = text
+export default class CommandSelect extends CommandClass {
+  async handle() {
+    const selectWeekDayWord = this.text
       .replace("📋 Расписание на ", "")
       .split(" ")[0];
+
     if (!weekDays.includes(selectWeekDayWord)) return;
 
     const currentDate = new Date();
-    const selectWeekDay = weekDays.indexOf(selectWeekDayWord) - 1;
-    currentDate.setDate(currentDate.getDate() + selectWeekDay);
+    currentDate.setHours(0, 0, 0, 0);
+
+    const selectedDayIndex = weekDays.indexOf(selectWeekDayWord);
+    const currentDayIndex = currentDate.getDay();
+
+    let daysToAdd = selectedDayIndex - currentDayIndex;
+    if (daysToAdd < 0) daysToAdd += 7;
+    currentDate.setDate(currentDate.getDate() + daysToAdd);
 
     const lessons = (await api.lessons(this.user.groupId)).lessons;
-
     const getForCurrentDay = lessons
       .filter((lesson) => lesson.weekday == currentDate.getDay())
       .sort((a, b) => {
@@ -45,50 +45,54 @@ export default class CommandSelect extends CommandClass {
     if (getForCurrentDay.length == 0)
       return this.ctx.telegram
         .sendMessage(
-          chatId,
+          this.chatId,
           `ℹ️ Информация\n\n❌ Нет расписания на ${selectWeekDayWord}`,
           MenuMain,
         )
         .catch((err) => console.error(err));
-
-    this.ctx.telegram
-      .sendMessage(chatId, renderTable(getForCurrentDay, currentDate), {
-        parse_mode: "markdown",
-        ...MenuMain,
-      })
-      .catch((err) => console.error(err));
+    if (this?.user?.table) {
+      this.ctx.telegram.sendChatAction(this.chatId, "upload_photo");
+      const { buffer, caption } = await createPhotoTable(
+        getForCurrentDay,
+        currentDate,
+      ).catch((err) => console.error(err));
+      this.ctx.telegram
+        .sendPhoto(
+          this.chatId,
+          {
+            source: buffer,
+            parse_mode: "markdown",
+          },
+          {
+            caption: caption,
+            parse_mode: "markdown",
+            ...MenuMain,
+          },
+        )
+        .catch(() => {
+          this.ctx.telegram
+            .sendMessage(
+              this.chatId,
+              createTextTable(getForCurrentDay, currentDate),
+              {
+                parse_mode: "markdown",
+                ...MenuMain,
+              },
+            )
+            .catch((err) => console.error(err));
+        });
+    } else {
+      this.ctx.telegram.sendChatAction(this.chatId, "typing");
+      this.ctx.telegram
+        .sendMessage(
+          this.chatId,
+          createTextTable(getForCurrentDay, currentDate),
+          {
+            parse_mode: "markdown",
+            ...MenuMain,
+          },
+        )
+        .catch((err) => console.error(err));
+    }
   }
-}
-
-const weekDay = [
-  "Воскресенье",
-  "Понедельник",
-  "Вторник",
-  "Среда",
-  "Четверг",
-  "Пятница",
-  "Суббота",
-];
-
-function renderTable(rows, date) {
-  const table = [
-    `┏━━━━━━━━━━━━━━━━━━━━━━\n┃ Дата:    ${format(date, "dd.MM.yy")} (${weekDay[date.getDay()]})\n┣━━━━━━━━━━━━━━━━━━━━━━`,
-  ];
-  rows.forEach((row, i) => {
-    table.push(`┃ ${row.startTime}    ${maxLength(row?.subject?.name, 15)}`);
-    table.push(
-      `┃ ${row.endTime}    ${row?.teachers?.map((e) => e.fio)?.join(" | ")}`,
-    );
-    table.push(`┃ Каб.      ${row?.cabinet?.name || "***Не указан***"}`);
-    if (i != rows.length - 1) table.push("┣━━━━━━━━━━━━━━━━━━━━━━");
-  });
-
-  table.push("┗━━━━━━━━━━━━━━━━━━━━━━");
-
-  return table.join("\n");
-}
-
-function maxLength(word, length) {
-  if (word.length > length) return word.slice(0, length) + "...";
-  return word;
 }

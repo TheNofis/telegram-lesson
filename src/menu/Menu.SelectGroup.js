@@ -15,7 +15,7 @@ const MenuSelectGroupNoBack = await Api.groups().then((groups) => {
 });
 
 const MenuSelectGroupBack = JSON.parse(JSON.stringify(MenuSelectGroupNoBack));
-MenuSelectGroupBack.reply_markup.keyboard.push(["↩️ Назад ↩️"]);
+MenuSelectGroupBack.reply_markup.keyboard.unshift(["↩️ Назад ↩️"]);
 
 export default {
   MenuSelectGroupNoBack,

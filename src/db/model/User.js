@@ -9,10 +9,7 @@ const User = new Schema({
   groupName: { type: String, default: null },
   groupId: { type: Number, default: null },
   role: { type: String, default: "user" },
-  // TODO: add role / roles (на выбор, что получится)
-  // Отличие:
-  // role - String
-  // roles - Array<String>
+  table: { type: Boolean, default: 0 }, // 0 - text, 1 - photo
 });
 
 export default model("User", User);
