@@ -6,7 +6,6 @@ import MenuMain from "../../menu/Menu.Main.js";
 
 export default class CommandSelect extends CommandClass {
   async handle() {
-    if (this.user.role != "admin") return;
     if (!this.text.startsWith("/invite")) return;
 
     const count = Number(text.split(" ")[1]) || 1; // default count = 1

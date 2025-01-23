@@ -55,9 +55,14 @@ export default class {
         new CommandSchedule(payload),
         new CommandSelectWeekDay(payload),
         new CommandScheduleForWeekDay(payload),
-        new CommandCreateInvite(payload),
         new CommandAcceptInvite(payload),
       ];
+
+      if (this.user.role == "admin")
+        this.initCommandList = [
+          ...this.initCommandList,
+          new CommandCreateInvite(payload),
+        ];
 
       this.initCommandList.forEach((command) => command.handle());
     });
