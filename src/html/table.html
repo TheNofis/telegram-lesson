@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  </head>
+  <body>
+    <table class="table-lessons">
+      <thead>
+        <tr>
+          <th class="time">#</th>
+          <th class="caption-lessons">Занятия</th>
+        </tr>
+      </thead>
+      <tbody>
+        {CONTENT}
+      </tbody>
+    </table>
+  </body>
+  <style>
+    body {
+      display: table;
+
+      margin: 0;
+      padding: 0;
+    }
+    span {
+      display: block;
+    }
+    .table-lessons {
+      border-collapse: collapse;
+      box-shadow:
+        0 3px 1px -2px rgba(0, 0, 0, 0.2),
+        0 2px 2px 0 rgba(0, 0, 0, 0.14),
+        0 1px 5px 0 rgba(0, 0, 0, 0.12);
+    }
+    .table-lessons > tbody > tr:not(:last-child) {
+      border-bottom: 1px solid #c1c1c1;
+    }
+    .caption-lessons {
+      text-align: left;
+    }
+
+    .time,
+    .row-lessons {
+      padding: 5px;
+      margin: auto 0;
+    }
+    .row-lessons {
+      display: flex;
+      flex-direction: column;
+    }
+    .time {
+      border-right: 1px solid #c1c1c1;
+    }
+  </style>
+</html>
