@@ -7,7 +7,7 @@ const Invite = new Schema({
   creatorId: { type: String, required: true },
   createdAt: { type: Number, default: Date.now },
   count: { type: Number, default: 1 },
-  active: { type: Boolean, default: false },
+  active: { type: Boolean, default: true },
 });
 
 export default model("Invite", Invite);

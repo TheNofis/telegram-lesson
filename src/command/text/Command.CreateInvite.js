@@ -13,7 +13,6 @@ export default class CommandSelect extends CommandClass {
 
     const invite = new Invite({
       creatorId: this.user.id,
-      active: true,
       count: count,
     });
 
