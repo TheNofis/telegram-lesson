@@ -24,11 +24,16 @@ export default class CommandSelect extends CommandClass {
     if (!weekDays.includes(selectWeekDayWord)) return;
 
     const currentDate = new Date();
-    const selectWeekDay = weekDays.indexOf(selectWeekDayWord) - 1;
-    currentDate.setDate(currentDate.getDate() + selectWeekDay);
+    currentDate.setHours(0, 0, 0, 0);
+
+    const selectedDayIndex = weekDays.indexOf(selectWeekDayWord);
+    const currentDayIndex = currentDate.getDay();
+
+    let daysToAdd = selectedDayIndex - currentDayIndex;
+    if (daysToAdd < 0) daysToAdd += 7;
+    currentDate.setDate(currentDate.getDate() + daysToAdd);
 
     const lessons = (await api.lessons(this.user.groupId)).lessons;
-
     const getForCurrentDay = lessons
       .filter((lesson) => lesson.weekday == currentDate.getDay())
       .sort((a, b) => {
@@ -47,6 +52,7 @@ export default class CommandSelect extends CommandClass {
         .catch((err) => console.error(err));
 
     const type = 1;
+
     if (type) {
       this.ctx.telegram.sendChatAction(this.chatId, "upload_photo");
       this.ctx.telegram

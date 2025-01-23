@@ -16,7 +16,9 @@ export default class CommandSelect extends CommandClass {
       return;
 
     const lessons = (await api.lessons(this.user.groupId)).lessons;
+
     const currentDate = new Date();
+    currentDate.setHours(0, 0, 0, 0);
 
     if (this.text == "📋 Расписание на завтра")
       currentDate.setDate(currentDate.getDate() + 1);
