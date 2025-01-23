@@ -8,6 +8,7 @@ const User = new Schema({
   createdAt: { type: Number, default: Date.now },
   groupName: { type: String, default: null },
   groupId: { type: Number, default: null },
+  table: { type: Boolean, default: 0 }, // 0 - text, 1 - photo
 });
 
 export default model("User", User);

@@ -13,8 +13,6 @@ const weekDay = [
   "Суббота",
 ];
 
-// {format(date, "dd.MM.yy")} (${weekDay[date.getDay()]
-// date
 const createPhotoTable = async (rows, date) => {
   const trs = rows.map((row) => {
     const { startTime, endTime, subject, teachers, cabinet } = row;
@@ -33,7 +31,10 @@ const createPhotoTable = async (rows, date) => {
       format: "png",
     },
   });
-  return buffer;
+  return {
+    buffer,
+    caption: `Расписание на ${format(date, "dd.MM.yy")} (${weekDay[date.getDay()]})`,
+  };
 };
 
 const createTextTable = (rows, date) => {

@@ -41,18 +41,21 @@ export default class CommandSelect extends CommandClass {
           MenuMain,
         )
         .catch((err) => console.error(err));
-    const type = 1;
-    if (type) {
+    if (this?.user?.table) {
       this.ctx.telegram.sendChatAction(this.chatId, "upload_photo");
+      const { buffer, caption } = await createPhotoTable(
+        getForCurrentDay,
+        currentDate,
+      ).catch((err) => console.error(err));
       this.ctx.telegram
         .sendPhoto(
           this.chatId,
           {
-            source: await createPhotoTable(getForCurrentDay, currentDate),
+            source: buffer,
             parse_mode: "markdown",
           },
           {
-            caption: "Hi! :3",
+            caption: caption,
             parse_mode: "markdown",
             ...MenuMain,
           },
