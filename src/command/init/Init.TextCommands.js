@@ -25,7 +25,7 @@ export default class {
       const userId = ctx?.update?.message?.from?.id;
 
       // Cache
-      getCachedData(
+      this.user = await getCachedData(
         `user:${userId}`,
         async () => {
           return await User.findOne({ telegramId: userId });

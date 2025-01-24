@@ -1,6 +1,7 @@
 import CommandClass from "./Command.Class.js";
 
 import api from "../../api/api.js";
+import sheets from "../../api/sheets.js";
 import MenuMain from "../../menu/Menu.Main.js";
 
 const weekDays = [
@@ -14,6 +15,7 @@ const weekDays = [
 ];
 
 import { createTextTable, createPhotoTable } from "../../utils/createTable.js";
+import { startOfWeek } from "date-fns";
 
 export default class CommandSelect extends CommandClass {
   async handle() {
@@ -34,6 +36,12 @@ export default class CommandSelect extends CommandClass {
     currentDate.setDate(currentDate.getDate() + daysToAdd);
 
     const lessons = (await api.lessons(this.user.groupId)).lessons;
+    // const lessons = await sheets.lessons(
+    //   "01.ПиОСО.23.ОФ.О.2",
+    //   1,
+    //   new Date(startOfWeek(currentDate, { weekStartsOn: 1 })),
+    // );
+
     const getForCurrentDay = lessons
       .filter((lesson) => lesson.weekday == currentDate.getDay())
       .sort((a, b) => {

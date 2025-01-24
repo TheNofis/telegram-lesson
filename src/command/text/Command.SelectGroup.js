@@ -26,7 +26,6 @@ export default class CommandSelect extends CommandClass {
           `❌ Ошибка\n\nℹ️ Группа ${content[1]} не найдена!`,
         )
         .catch((err) => console.error(err));
-
     User.findOneAndUpdate(
       { telegramId: this.user.telegramId },
       { $set: { groupId: findGroup.id, groupName: findGroup.name } },

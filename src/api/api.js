@@ -42,7 +42,7 @@ export default class {
       3600,
     );
   }
-  static async lessons(groupId) {
+  static async lessons(groupId, date) {
     return getCachedData(
       `lessons-${groupId}`,
       () =>
@@ -52,7 +52,7 @@ export default class {
             publicationId,
             groupId,
             date: format(
-              startOfWeek(new Date(), { weekStartsOn: -6 }),
+              startOfWeek(date || new Date(), { weekStartsOn: 1 }),
               "yyyy-MM-dd",
             ),
           },

@@ -1,6 +1,8 @@
 import CommandClass from "./Command.Class.js";
 
 import api from "../../api/api.js";
+import sheets from "../../api/sheets.js";
+
 import MenuMain from "../../menu/Menu.Main.js";
 
 import { createTextTable, createPhotoTable } from "../../utils/createTable.js";
@@ -15,7 +17,9 @@ export default class CommandSelect extends CommandClass {
     )
       return;
 
-    const lessons = (await api.lessons(this.user.groupId)).lessons;
+    // const lessons = (await api.lessons(this.user.groupId)).lessons;
+    const lessons = await sheets.lessons("01.ПиОСО.23.ОФ.О.2", 1);
+    console.log(lessons);
 
     const currentDate = new Date();
     currentDate.setHours(0, 0, 0, 0);
