@@ -28,7 +28,12 @@ export default class CommandSelect extends CommandClass {
         .catch((err) => console.error(err));
     User.findOneAndUpdate(
       { telegramId: this.user.telegramId },
-      { $set: { groupId: findGroup.id, groupName: findGroup.name } },
+      {
+        $set: {
+          "hexlet.groupName": content[1],
+          "hexlet.groupId": findGroup.id || "",
+        },
+      },
     )
       .then(() => {
         redisClient
