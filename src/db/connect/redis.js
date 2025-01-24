@@ -13,4 +13,12 @@ const redisClient = await createClient({
   .on("ready", () => console.log("Redis connected"))
   .connect();
 
-export default redisClient;
+async function getCachedData(key, fetchFunction, ex = 60 * 60 * 24) {
+  const cache = await redisClient.get(key);
+  if (cache) return JSON.parse(cache);
+
+  const data = await fetchFunction();
+  redisClient.set(key, JSON.stringify(data), { EX: ex }).catch(console.error);
+  return data;
+}
+export { redisClient, getCachedData };

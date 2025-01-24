@@ -3,7 +3,7 @@ import Api from "../../api/api.js";
 
 import MenuMain from "../../menu/Menu.Main.js";
 import User from "../../db/model/User.js";
-import redisClient from "../../db/connect/redis.js";
+import { redisClient } from "../../db/connect/redis.js";
 
 export default class CommandSelect extends CommandClass {
   async handle() {

@@ -11,7 +11,7 @@ import CommandScheduleForWeekDay from "../text/Command.ScheduleForWeekDay.js";
 import CommandCreateInvite from "../text/Command.CreateInvite.js";
 import CommandAcceptInvite from "../text/Command.AcceptInvite.js";
 
-import redisClient from "../../db/connect/redis.js";
+import { getCachedData } from "../../db/connect/redis.js";
 
 export default class {
   constructor(bot) {
@@ -25,15 +25,13 @@ export default class {
       const userId = ctx?.update?.message?.from?.id;
 
       // Cache
-      const cacheUser = await redisClient.get(`user:${userId}`);
-      if (cacheUser !== null && cacheUser !== undefined && cacheUser !== "null")
-        this.user = JSON.parse(cacheUser);
-      else {
-        this.user = await User.findOne({ telegramId: userId });
-        redisClient
-          .set(`user:${userId}`, JSON.stringify(this.user), { EX: 600 })
-          .catch((err) => console.error(`TextCommad.Init.js: ${err}`));
-      }
+      getCachedData(
+        `user:${userId}`,
+        async () => {
+          return await User.findOne({ telegramId: userId });
+        },
+        600,
+      );
 
       if (this.user == null)
         return ctx.telegram.sendMessage(

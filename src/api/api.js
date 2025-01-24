@@ -1,7 +1,7 @@
 import fetch from "node-fetch";
 import { format, startOfWeek } from "date-fns";
 
-import redisClient from "../db/connect/redis.js";
+import { getCachedData } from "../db/connect/redis.js";
 
 const publicationId = "cdb2a14c-a891-4f9f-b56c-7e8eb559c766";
 const baseUrl = "https://schedule.mstimetables.ru/api/publications";
@@ -28,39 +28,36 @@ async function post({ url, data }) {
 
 export default class {
   static async groups() {
-    const cache = await redisClient.get("groups");
-    if (cache !== null) return JSON.parse(cache);
-
-    return get(`${publicationId}/groups`).then(async (groups) => {
-      const sortedGroups = groups.sort((a, b) => {
-        if (a.name > b.name) return 1;
-        if (a.name < b.name) return -1;
-        return 0;
-      });
-
-      await redisClient.set("groups", JSON.stringify(sortedGroups));
-      redisClient.expire("groups", 3600);
-      return sortedGroups;
-    });
+    return getCachedData(
+      "groups",
+      () =>
+        get(`${publicationId}/groups`).then((groups) => {
+          const sortedGroups = groups.sort((a, b) => {
+            if (a.name > b.name) return 1;
+            if (a.name < b.name) return -1;
+            return 0;
+          });
+          return sortedGroups;
+        }),
+      3600,
+    );
   }
   static async lessons(groupId) {
-    const cache = await redisClient.get(`lessons-${groupId}`);
-    if (cache !== null) return JSON.parse(cache);
-
-    return post({
-      url: "group/lessons",
-      data: {
-        publicationId,
-        groupId,
-        date: format(
-          startOfWeek(new Date(), { weekStartsOn: -6 }),
-          "yyyy-MM-dd",
-        ),
-      },
-    }).then(async (lessons) => {
-      await redisClient.set(`lessons-${groupId}`, JSON.stringify(lessons));
-      redisClient.expire(`lessons-${groupId}`, 3600);
-      return lessons;
-    });
+    return getCachedData(
+      `lessons-${groupId}`,
+      () =>
+        post({
+          url: "group/lessons",
+          data: {
+            publicationId,
+            groupId,
+            date: format(
+              startOfWeek(new Date(), { weekStartsOn: -6 }),
+              "yyyy-MM-dd",
+            ),
+          },
+        }),
+      3600,
+    );
   }
 }
