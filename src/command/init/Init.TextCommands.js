@@ -1,5 +1,8 @@
 import User from "../../db/model/User.js";
 
+import CommandSelectCollege from "../text/Command.SelectCollege.js";
+import CommandSelectCourse from "../text/Command.SelectCourse.js";
+import CommandSelectMGOKGroup from "../text/Command.SelectMGOKGroup.js";
 import CommandSelectGroup from "../text/Command.SelectGroup.js";
 import CommandProfile from "../text/Command.Profile.js";
 
@@ -46,6 +49,9 @@ export default class {
       };
 
       this.initCommandList = [
+        new CommandSelectCollege(payload),
+        new CommandSelectCourse(payload),
+        new CommandSelectMGOKGroup(payload),
         new CommandSelectGroup(payload),
         new CommandProfile(payload),
         new CommandChangeGroup(payload),

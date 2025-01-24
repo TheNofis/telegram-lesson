@@ -3,7 +3,7 @@ import { v4 } from "uuid";
 
 const Mgok = new Schema({
   groupName: { type: String, default: null },
-  curse: { type: Number, default: null },
+  course: { type: Number, default: null },
 });
 
 const Hexlet = new Schema({

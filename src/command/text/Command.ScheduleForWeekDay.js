@@ -35,12 +35,12 @@ export default class CommandSelect extends CommandClass {
     if (daysToAdd < 0) daysToAdd += 7;
     currentDate.setDate(currentDate.getDate() + daysToAdd);
 
-    const lessons = (await api.lessons(this.user.groupId)).lessons;
-    // const lessons = await sheets.lessons(
-    //   "01.ПиОСО.23.ОФ.О.2",
-    //   1,
-    //   new Date(startOfWeek(currentDate, { weekStartsOn: 1 })),
-    // );
+    //const lessons = (await api.lessons(this.user.groupId)).lessons;
+    const lessons = await sheets.lessons(
+      "01.ПиОСО.23.ОФ.О.2",
+      1,
+      new Date(startOfWeek(currentDate, { weekStartsOn: 1 })),
+    );
 
     const getForCurrentDay = lessons
       .filter((lesson) => lesson.weekday == currentDate.getDay())

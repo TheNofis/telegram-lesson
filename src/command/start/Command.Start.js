@@ -2,7 +2,7 @@ import User from "../../db/model/User.js";
 
 import CommandClass from "./Command.Class.js";
 
-import MenuSelectGroup from "../../menu/Menu.SelectGroup.js";
+import MenuSelectCollege from "../../menu/Menu.SelectCollege.js";
 
 export default class CommandSelect extends CommandClass {
   async handle() {
@@ -21,10 +21,12 @@ export default class CommandSelect extends CommandClass {
           this.ctx.telegram
             .sendMessage(
               this.chatId,
-              "ℹ️ Регистрация\n\n✅ Для удобной работы в боте надо зарегистрироваться!\n🔻 Выберите вашу группу снизу",
-              MenuSelectGroup.MenuSelectGroupNoBack,
+              "Выберите свой колледж",
+              MenuSelectCollege,
             )
-            .catch((err) => console.error(err));
+            .catch((err) => {
+              console.error(err);
+            });
         })
         .catch((err) => {
           console.error(err);
