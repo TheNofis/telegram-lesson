@@ -22,6 +22,7 @@ export default class CommandSelect extends CommandClass {
 
     const currentDate = this.getSelectedDate(selectedDay);
     const lessons = await this.fetchLessons(currentDate);
+    console.log(lessons);
     if (!lessons) {
       await this.sendNoScheduleMessage(selectedDay);
       return;
@@ -66,7 +67,12 @@ export default class CommandSelect extends CommandClass {
         new Date(startOfWeek(currentDate, { weekStartsOn: 1 })),
       );
     }
-    return (await api.lessons(this.user.groupId)).lessons;
+    return (
+      await api.lessons(
+        this.user?.hexlet?.groupId,
+        new Date(startOfWeek(currentDate, { weekStartsOn: 1 })),
+      )
+    ).lessons;
   }
 
   async sendNoScheduleMessage(selectedDay) {

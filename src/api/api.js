@@ -52,7 +52,7 @@ export default class {
             publicationId,
             groupId,
             date: format(
-              startOfWeek(date || new Date(), { weekStartsOn: 1 }),
+              date ? date : startOfWeek(new Date(), { weekStartsOn: 1 }),
               "yyyy-MM-dd",
             ),
           },
