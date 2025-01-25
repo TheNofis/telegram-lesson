@@ -40,6 +40,8 @@
    - `BOT_TOKEN`: Токен вашего Telegram бота.
    - `MONGODB_URI`: URI вашей MongoDB базы данных.
    - `REDIS_URL`: URL вашего Redis сервера.
+   - `EXEL_START_DATE`: Дата начала расписания в формате(dd.MM.yy) -1 день.
+   - `EXEL_ID`: ID вашей таблицы в Google Sheets.
 
 <br/>
 
@@ -80,9 +82,9 @@
 
 ### 1. Слой Взаимодействия с API
 
-Директория `api` содержит файлы, которые отвечают за связь с внешними сервисами
+Директория `api` содержит файлы, которые отвечают за связь с внешними сервисами. Этот слой упрощает процесс отправки запросов к API и обработки ответов.
 
-- **api.js**: Файл который служит прослойкой для удобного взаимодействия с API расписания колледжа. Этот слой упрощает процесс отправки запросов к API и обработки ответов.
+- **api.js**: Файл который служит прослойкой для удобного взаимодействия с API расписания HEXLET колледжа.
 
   ```javascript
   // Пример api.js
@@ -98,6 +100,43 @@
 
   // Получение занятий для группы
   static async lessons(groupId) {...}
+  }
+  ```
+
+- **sheets.js**: Файл который служит прослойкой для удобного взаимодействия с Google Sheets расписания MGOK колледжа.
+
+  ```javascript
+  // Пример sheets.js
+  const startDate = parse("14.01.25", "dd.MM.yy", new Date()); // дата начало учебного года в таблице  -1 день
+  const spreadsheetId = "1XuDZVnfjl9cn4SGrqjA3CLgYyzyPNsQKI0xNNC48Aa4"; // ID таблицы в exel
+  const timeTable = [
+    ["09:00", "10:30"], // начало, конец пары
+    ...
+  ];
+
+  // Главная функция получения данных с таблицы
+  async function getSheetData(spreadsheetId, range) {}
+
+  // Функция перевода числа в букву
+  // Example: numberToLetters(1) => "A"
+  function numberToLetters(num) {}
+
+  // Функция расчета дней без воскресенья
+  function calculateDaysWithoutSunday(startDate, endDate) {}
+
+  export default class {
+    // Получение вкладок(название курсов)
+    static async getSheetTabs() {}
+
+    // Получение групп, если указать tab то функция вернет группы определенного курса
+    // tab - номер вкладки
+    static async groups(tab) {}
+
+    // Получение занятий
+    // groupName - название группы
+    // tab - номер вкладки
+    // date - дата в формате Date (Нужно указывать дату начало недели)
+    static async lessons(groupName, tab, date) {}
   }
   ```
 
@@ -201,6 +240,19 @@
     export default mongoClient;
     ```
 
+  - **sheet.js**: Файл для подключения к базе данных Google Sheets.
+
+    ```javascript
+    // Пример sheet.js
+
+    const auth = await new google.auth.GoogleAuth({
+      keyFile: "credentials.json", // credentials.json должен быть в корневой директории
+      scopes: ["https://www.googleapis.com/auth/spreadsheets.readonly"],
+    }).getClient();
+
+    export default google.sheets({ version: "v4", auth: auth });
+    ```
+
 - **model** Директория с моделями базы данных
 
   - **User.js**: Модель пользователя.
@@ -208,14 +260,26 @@
   ```javascript
   // Пример User.js
 
+  const Mgok = new Schema({
+    groupName: { type: String, default: null },
+    course: { type: Number, default: null },
+  });
+
+  const Hexlet = new Schema({
+    groupName: { type: String, default: null },
+    groupId: { type: Number, default: null },
+  });
+
   const User = new Schema({
     id: { type: String, default: v4(), required: true, unique: true }, // UUID пользователя внутри бота
     username: { type: String, required: true }, // username в телеграме
     telegramId: { type: Number, required: true }, // id пользователя в телеграме
     createdAt: { type: Number, default: Date.now }, // Дата создания пользователя
+    mgok: { type: Mgok }, // Группа MGOK
+    hexlet: { type: Hexlet }, // Группа Hexlet
     groupName: { type: String, default: null }, // Название группы
     groupId: { type: Number, default: null }, // ID группы
-    table: { type: Boolean, default: 0 }, // Тип отправляемой таблицы 0 - TEXT, 1 - IMAGE
+    table: { type: Boolean, default: false }, // Тип отправляемой таблицы 0 - TEXT, 1 - IMAGE
   });
   ```
 
@@ -338,6 +402,9 @@ export default Markup.keyboard([
   // День недели
   const weekDay = [...];
 
+  // Функция создания таблицы в виде фото
+  // rows - массив с расписанием
+  // date - дата
   const createPhotoTable = async (rows, date) => {
     const trs = rows.map((row) => {
       const { startTime, endTime, subject, teachers, cabinet } = row;
@@ -362,6 +429,9 @@ export default Markup.keyboard([
     };
   };
 
+  // Функция создания текстовой таблицы
+  // rows - массив с расписанием
+  // date - дата
   const createTextTable = (rows, date) => {
     const table = [
       `┏━━━━━━━━━━━━━━━━━━━━━━\n┃ Дата:    ${format(date, "dd.MM.yy")} (${weekDay[date.getDay()]})\n┣━━━━━━━━━━━━━━━━━━━━━━`,
