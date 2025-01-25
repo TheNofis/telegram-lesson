@@ -15,14 +15,17 @@ export default class CommandSelect extends CommandClass {
       {
         $set: {
           "mgok.course": course,
+          "mgok.groupName": null,
         },
       },
     )
-      .then(() => {
+      .then(async () => {
         this.ctx.telegram.sendMessage(
           this.chatId,
           `ℹ️ Регистрация\n\n🔻 Выберите вашу группу снизу`,
-          MenuSelectMGOKGroup.MenuSelectGroupNoBack,
+          await MenuSelectMGOKGroup.MenuSelectGroupNoBack(
+            this?.user?.mgok?.course,
+          ),
         );
       })
       .catch((err) => {

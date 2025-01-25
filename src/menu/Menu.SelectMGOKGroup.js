@@ -1,26 +1,28 @@
 import { Markup } from "telegraf";
 import Api from "../api/sheets.js";
 
-const MenuSelectGroupNoBack = await Api.groups().then((groups) => {
-  return Markup.keyboard(
-    chunkArray(
-      groups.map((group) => {
-        return `📕 ${group}`;
-      }),
-      2,
-    ),
-  )
-    .oneTime()
-    .resize();
-});
+export default class {
+  static async MenuSelectGroupNoBack(tab) {
+    const getCourseName = (await Api.getSheetTabs())[tab];
+    const getGroupList = await Api.groups(getCourseName);
 
-const MenuSelectGroupBack = JSON.parse(JSON.stringify(MenuSelectGroupNoBack));
-MenuSelectGroupBack.reply_markup.keyboard.unshift(["↩️ Назад ↩️"]);
-
-export default {
-  MenuSelectGroupNoBack,
-  MenuSelectGroupBack,
-};
+    return Markup.keyboard(
+      chunkArray(
+        getGroupList.map((group) => {
+          return `📕 ${group}`;
+        }),
+        2,
+      ),
+    )
+      .oneTime()
+      .resize();
+  }
+  static async MenuSelectGroupBack(tab) {
+    const output = await this.MenuSelectGroupNoBack(tab);
+    output.reply_markup.keyboard.unshift(["↩️ Назад ↩️"]);
+    return output;
+  }
+}
 
 function chunkArray(arr, size) {
   const result = [];

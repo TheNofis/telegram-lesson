@@ -10,7 +10,9 @@ export default class CommandSelect extends CommandClass {
     const content = this.text.split(" ");
 
     if (content[0] != "📕") return;
-    const getGroupList = await Api.groups();
+    const getCourseName = (await Api.getSheetTabs())[this?.user?.mgok?.course];
+
+    const getGroupList = await Api.groups(getCourseName);
 
     const findGroup =
       getGroupList.find((group) => {
