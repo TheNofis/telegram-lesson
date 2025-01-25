@@ -1,7 +1,7 @@
 import CommandClass from "./Command.Class.js";
 
-import MenuSelectMGOKGroup from "../../menu/Menu.SelectMGOKGroup.js";
-import MenuSelectHexletGroup from "../../menu/Menu.SelectGroup.js";
+import MenuSelectCourse from "../../menu/Menu.SelectCourse.js";
+import MenuSelectHexletGroup from "../../menu/Menu.SelectHEXLETGroup.js";
 
 export default class CommandSelect extends CommandClass {
   isValidCommand() {
@@ -11,19 +11,21 @@ export default class CommandSelect extends CommandClass {
   async handle() {
     if (!this.isValidCommand()) return;
 
-    const MgokMenu = this.user?.mgok
-      ? MenuSelectMGOKGroup.MenuSelectGroupBack
-      : null;
-    const HexletMenu = this.user?.hexlet
-      ? MenuSelectHexletGroup.MenuSelectGroupBack
-      : null;
+    let menu;
+    let message;
+
+    if (this.user?.hexlet) {
+      menu = MenuSelectHexletGroup.MenuSelectGroupBack;
+      message =
+        "ℹ️ Редактирования\n\n✅ Изменения вашей группы\n🔻 Выберите вашу группу снизу";
+    } else if (this.user?.mgok) {
+      menu = MenuSelectCourse.MenuSelectCourseBack;
+      message =
+        "ℹ️ Редактирования\n\n✅ Изменения вашего курса\n🔻 Выберите курс снизу";
+    }
 
     this.ctx.telegram
-      .sendMessage(
-        this.chatId,
-        "ℹ️ Редактирования\n\n✅ Изменения вашей группы\n🔻 Выберите вашу группу снизу",
-        MgokMenu || HexletMenu,
-      )
+      .sendMessage(this.chatId, message, menu)
       .catch((err) => console.error(err));
   }
 }
