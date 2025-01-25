@@ -3,8 +3,12 @@ import CommandClass from "./Command.Class.js";
 import MenuMain from "../../menu/Menu.Main.js";
 
 export default class CommandSelect extends CommandClass {
+  isValidCommand() {
+    return this.text === "👤 Профиль";
+  }
+
   async handle() {
-    if (this.text != "👤 Профиль") return;
+    if (!this.isValidCommand()) return;
 
     const groupname =
       this.user?.mgok?.groupName ||

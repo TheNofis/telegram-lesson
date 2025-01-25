@@ -6,8 +6,12 @@ import User from "../../db/model/User.js";
 import { redisClient } from "../../db/connect/redis.js";
 
 export default class CommandSelect extends CommandClass {
+  isValidCommand() {
+    return this.text.startsWith("📚") && this.text !== "📚 Группы";
+  }
+
   async handle() {
-    if (this.text == "📚 Группы") return;
+    if (!this.isValidCommand()) return;
 
     const content = this.text.split(" ");
 

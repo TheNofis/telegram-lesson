@@ -4,8 +4,12 @@ import MenuSelectCourse from "../../menu/Menu.SelectCourse.js";
 import MenuSelectHexletGroup from "../../menu/Menu.SelectGroup.js";
 
 export default class CommandSelect extends CommandClass {
+  isValidCommand() {
+    return this.text === "🏫 МГОК" || this.text === "🏫 Хекслет";
+  }
+
   async handle() {
-    if (!(this.text === "🏫 МГОК" || this.text === "🏫 Хекслет")) return;
+    if (!this.isValidCommand()) return;
 
     if (this.text === "🏫 МГОК") {
       this.ctx.telegram

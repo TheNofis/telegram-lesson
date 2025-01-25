@@ -6,8 +6,12 @@ import MenuMain from "../../menu/Menu.Main.js";
 import User from "../../db/model/User.js";
 
 export default class CommandSelect extends CommandClass {
+  isValidCommand() {
+    return this.text.startsWith("/accept");
+  }
+
   async handle() {
-    if (!this.text.startsWith("/accept")) return;
+    if (!this.isValidCommand()) return;
 
     const uuid = text.split(" ")[1];
     const findInvite = await Invite.findOne({ invite: uuid });

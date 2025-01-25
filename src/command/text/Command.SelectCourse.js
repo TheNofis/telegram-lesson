@@ -6,8 +6,12 @@ import { redisClient } from "../../db/connect/redis.js";
 
 const courses = ["1️⃣ Курс", "2️⃣ Курс", "3️⃣ Курс", "4️⃣ Курс"];
 export default class CommandSelect extends CommandClass {
+  isValidCommand() {
+    return courses.includes(this.text);
+  }
+
   async handle() {
-    if (!courses.includes(this.text)) return;
+    if (!this.isValidCommand()) return;
 
     const course = courses.indexOf(this.text);
 

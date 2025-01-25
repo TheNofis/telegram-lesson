@@ -6,10 +6,13 @@ import User from "../../db/model/User.js";
 import { redisClient } from "../../db/connect/redis.js";
 
 export default class CommandSelect extends CommandClass {
+  isValidCommand() {
+    return this.text.startsWith("📕") && this.text !== "📕 Группы";
+  }
   async handle() {
-    const content = this.text.split(" ");
+    if (!this.isValidCommand()) return;
 
-    if (content[0] != "📕") return;
+    const content = this.text.split(" ");
     const getCourseName = (await Api.getSheetTabs())[this?.user?.mgok?.course];
 
     const getGroupList = await Api.groups(getCourseName);

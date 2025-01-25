@@ -4,8 +4,12 @@ import MenuSelectMGOKGroup from "../../menu/Menu.SelectMGOKGroup.js";
 import MenuSelectHexletGroup from "../../menu/Menu.SelectGroup.js";
 
 export default class CommandSelect extends CommandClass {
+  isValidCommand() {
+    return this.text === "📚 Группы";
+  }
+
   async handle() {
-    if (this.text != "📚 Группы") return;
+    if (!this.isValidCommand()) return;
 
     const MgokMenu = this.user?.mgok
       ? MenuSelectMGOKGroup.MenuSelectGroupBack
