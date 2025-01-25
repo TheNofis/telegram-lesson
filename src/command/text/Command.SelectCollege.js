@@ -5,13 +5,13 @@ import MenuSelectHexletGroup from "../../menu/Menu.SelectGroup.js";
 
 export default class CommandSelect extends CommandClass {
   async handle() {
-    if (!(this.text === "МГОК" || this.text === "Хекслет")) return;
+    if (!(this.text === "🏫 МГОК" || this.text === "🏫 Хекслет")) return;
 
     if (this.text === "🏫 МГОК") {
       this.ctx.telegram
         .sendMessage(
           this.chatId,
-          "Вы выбрали МГОК!\n\nВыберите курс",
+          "ℹ️ Регистрация\n\n✅ Для удобной работы в боте надо зарегистрироваться!\n🔻 Выберите ваш курс снизу",
           MenuSelectCourse,
         )
         .catch((err) => console.error(err));
