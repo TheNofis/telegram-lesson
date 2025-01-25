@@ -13,15 +13,6 @@ const timeTable = [
   ["17:30", "19:00"],
 ];
 
-async function getSheetTabs() {
-  return getCachedData("MCOURSES", async () => {
-    const response = await googleSheets.spreadsheets.get({ spreadsheetId });
-    return response.data.sheets
-      .filter((sheet) => !sheet.properties.hidden)
-      .map((sheet) => sheet.properties.title);
-  });
-}
-
 async function getSheetData(spreadsheetId, range) {
   const response = await googleSheets.spreadsheets.values.get({
     spreadsheetId,
@@ -48,6 +39,14 @@ function calculateDaysWithoutSunday(startDate, endDate) {
 }
 
 export default class {
+  static async getSheetTabs() {
+    return getCachedData("MCOURSES", async () => {
+      const response = await googleSheets.spreadsheets.get({ spreadsheetId });
+      return response.data.sheets
+        .filter((sheet) => !sheet.properties.hidden)
+        .map((sheet) => sheet.properties.title);
+    });
+  }
   static async groups(tab) {
     const key = tab ? `MGROUPS:${tab}` : "MGROUPS:ALL";
     return getCachedData(key, async () => {
@@ -57,7 +56,7 @@ export default class {
         return groups;
       }
 
-      const allTabs = await getSheetTabs();
+      const allTabs = await this.getSheetTabs();
       const allGroups = (
         await Promise.all(
           allTabs.map((tab) => getSheetData(spreadsheetId, `'${tab}'!C5:AZ5`)),
@@ -70,7 +69,7 @@ export default class {
     if (!date) date = new Date(startOfWeek(new Date(), { weekStartsOn: 1 }));
 
     const days = calculateDaysWithoutSunday(date, startDate);
-    const allTabs = await getSheetTabs();
+    const allTabs = await this.getSheetTabs();
     const groups = await this.groups(allTabs[tab]);
     const groupId = groups.indexOf(groupName) + 4; // 4 is left padding
     const groupLetterId = numberToLetters(groupId);
