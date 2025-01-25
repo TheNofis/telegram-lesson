@@ -107,8 +107,6 @@
 
   ```javascript
   // Пример sheets.js
-  const startDate = parse("14.01.25", "dd.MM.yy", new Date()); // дата начало учебного года в таблице  -1 день
-  const spreadsheetId = "1XuDZVnfjl9cn4SGrqjA3CLgYyzyPNsQKI0xNNC48Aa4"; // ID таблицы в exel
   const timeTable = [
     ["09:00", "10:30"], // начало, конец пары
     ...
