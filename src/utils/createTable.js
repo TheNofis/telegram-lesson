@@ -47,9 +47,18 @@ const createTextTable = (rows, date) => {
     .filter((e) => e?.subject?.name)
     .forEach((row, i, rows) => {
       const { startTime, endTime, subject, teachers, cabinet } = row;
-      table.push(`┃ ${startTime}    ${maxLength(subject?.name, 15)}`);
-      table.push(`┃ ${endTime}    ${teachers?.map((e) => e.fio)?.join(" | ")}`);
-      table.push(`┃ Каб.      ${cabinet?.name || "***Не указан***"}`);
+      table.push(
+        `┃ ${startTime}    ${maxLength(subject?.name.replaceAll("\n", " "), 15)}`,
+      );
+      table.push(
+        `┃ ${endTime}    ${teachers
+          ?.map((e) => e.fio)
+          ?.join(" | ")
+          .replaceAll("\n", " ")}`,
+      );
+      table.push(
+        `┃ Каб.      ${cabinet?.name.replaceAll("\n", " ") || "***Не указан***"}`,
+      );
       if (i != rows.length - 1) table.push("┣━━━━━━━━━━━━━━━━━━━━━━");
     });
 
