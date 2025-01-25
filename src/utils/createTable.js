@@ -14,16 +14,18 @@ const weekDay = [
 ];
 
 const createPhotoTable = async (rows, date) => {
-  const trs = rows.map((row) => {
-    const { startTime, endTime, subject, teachers, cabinet } = row;
-    return createTr(
-      startTime,
-      endTime,
-      subject?.name,
-      teachers?.map((e) => e.fio)?.join(" | "),
-      cabinet?.name || "Не указан",
-    );
-  });
+  const trs = rows
+    .filter((e) => e?.subject?.name)
+    .map((row) => {
+      const { startTime, endTime, subject, teachers, cabinet } = row;
+      return createTr(
+        startTime,
+        endTime,
+        subject?.name,
+        teachers?.map((e) => e.fio)?.join(" | "),
+        cabinet?.name || "Не указан",
+      );
+    });
   const content = table.replace("{CONTENT}", trs.join("\n"));
   const buffer = await nodeHtmlToBuffer({
     html: content,
@@ -41,13 +43,15 @@ const createTextTable = (rows, date) => {
   const table = [
     `┏━━━━━━━━━━━━━━━━━━━━━━\n┃ Дата:    ${format(date, "dd.MM.yy")} (${weekDay[date.getDay()]})\n┣━━━━━━━━━━━━━━━━━━━━━━`,
   ];
-  rows.forEach((row, i) => {
-    const { startTime, endTime, subject, teachers, cabinet } = row;
-    table.push(`┃ ${startTime}    ${maxLength(subject?.name, 15)}`);
-    table.push(`┃ ${endTime}    ${teachers?.map((e) => e.fio)?.join(" | ")}`);
-    table.push(`┃ Каб.      ${cabinet?.name || "***Не указан***"}`);
-    if (i != rows.length - 1) table.push("┣━━━━━━━━━━━━━━━━━━━━━━");
-  });
+  rows
+    .filter((e) => e?.subject?.name)
+    .forEach((row, i, rows) => {
+      const { startTime, endTime, subject, teachers, cabinet } = row;
+      table.push(`┃ ${startTime}    ${maxLength(subject?.name, 15)}`);
+      table.push(`┃ ${endTime}    ${teachers?.map((e) => e.fio)?.join(" | ")}`);
+      table.push(`┃ Каб.      ${cabinet?.name || "***Не указан***"}`);
+      if (i != rows.length - 1) table.push("┣━━━━━━━━━━━━━━━━━━━━━━");
+    });
 
   table.push("┗━━━━━━━━━━━━━━━━━━━━━━");
 
