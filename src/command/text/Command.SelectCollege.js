@@ -9,7 +9,7 @@ export default class CommandSelect extends CommandClass {
       this.ctx.telegram
         .sendMessage(
           this.chatId,
-          "Вы выбрали МГОК!\n\n Выберите курс",
+          "Вы выбрали МГОК!\n\nВыберите курс",
           MenuSelectCourse,
         )
         .catch((err) => console.error(err));
