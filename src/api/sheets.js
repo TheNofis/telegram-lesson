@@ -1,9 +1,14 @@
 import { eachDayOfInterval, parse, isSunday, startOfWeek } from "date-fns";
+import dotenv from "dotenv";
+
 import googleSheets from "../db/connect/sheets.js";
 import { getCachedData } from "../db/connect/redis.js";
 
-const startDate = parse("14.01.25", "dd.MM.yy", new Date()); // -1 days
-const spreadsheetId = "1XuDZVnfjl9cn4SGrqjA3CLgYyzyPNsQKI0xNNC48Aa4"; // ID вашей таблицы
+dotenv.config();
+
+const startDate = parse(process.env.EXEL_START_DATE, "dd.MM.yy", new Date()); // -1 days
+const spreadsheetId = process.env.EXEL_ID; // ID вашей таблицы
+
 const timeTable = [
   ["09:00", "10:30"],
   ["10:40", "12:10"],
