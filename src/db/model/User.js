@@ -19,6 +19,6 @@ const User = new Schema({
   mgok: { type: Mgok },
   hexlet: { type: Hexlet },
   role: { type: String, default: "user" },
-  table: { type: Boolean, default: 0 }, // 0 - text, 1 - photo
+  table: { type: Boolean, default: false }, // 0 - text, 1 - photo
 });
 export default model("User", User);
