@@ -22,7 +22,7 @@ export default class CommandSelect extends CommandClass {
 
     const currentDate = this.getSelectedDate(selectedDay);
     const lessons = await this.fetchLessons(currentDate);
-    console.log(lessons);
+
     if (!lessons) {
       await this.sendNoScheduleMessage(selectedDay);
       return;
