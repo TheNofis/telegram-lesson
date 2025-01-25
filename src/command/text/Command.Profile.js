@@ -12,7 +12,7 @@ export default class CommandSelect extends CommandClass {
       "Не выбрана";
     const college = this.user?.hexlet?.groupId ? "Hexlet" : "МГОК";
     const course =
-      college == "МГОК" ? `🎓 Курс: ${this.user?.mgok?.course}\n` : "";
+      college == "МГОК" ? `🎓 Курс: ${this.user?.mgok?.course + 1}\n` : "";
 
     this.ctx.telegram
       .sendMessage(
