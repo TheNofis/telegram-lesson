@@ -3,11 +3,10 @@ import CommandClass from "./Command.Class.js";
 import User from "../../db/model/User.js";
 import MenuSelectMGOKGroup from "../../menu/Menu.SelectMGOKGroup.js";
 
-const courses = ["Первый", "Второй", "Третий", "Четвертый"];
-
+const courses = ["1️⃣ Курс", "2️⃣ Курс", "3️⃣ Курс", "4️⃣ Курс"];
 export default class CommandSelect extends CommandClass {
   async handle() {
-    if (!courses.includes(this.text.trim())) return;
+    if (!courses.includes(this.text)) return;
 
     const course = courses.indexOf(this.text);
 
@@ -22,7 +21,7 @@ export default class CommandSelect extends CommandClass {
       .then(() => {
         this.ctx.telegram.sendMessage(
           this.chatId,
-          `✅ Курс ${this.text} успешно выбран!\n\n ℹ️ Регистрация\n\n✅ Для удобной работы в боте надо зарегистрироваться!\n🔻 Выберите вашу группу снизу`,
+          `ℹ️ Регистрация\n\n🔻 Выберите вашу группу снизу`,
           MenuSelectMGOKGroup.MenuSelectGroupNoBack,
         );
       })
