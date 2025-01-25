@@ -20,19 +20,16 @@ export default class CommandSelect extends CommandClass {
         },
       },
     )
-      .then(() => {
-        redisClient
-          .del(this.user.telegramId)
-          .then(async () => {
-            this.ctx.telegram.sendMessage(
-              this.chatId,
-              `ℹ️ Регистрация\n\n🔻 Выберите вашу группу снизу`,
-              await MenuSelectMGOKGroup.MenuSelectGroupNoBack(
-                this?.user?.mgok?.course,
-              ),
-            );
-          })
-          .catch(console.error);
+      .then(async () => {
+        await redisClient.del(this?.user?.telegramId).catch(console.error);
+
+        this.ctx.telegram.sendMessage(
+          this.chatId,
+          `ℹ️ Регистрация\n\n🔻 Выберите вашу группу снизу`,
+          await MenuSelectMGOKGroup.MenuSelectGroupNoBack(
+            this?.user?.mgok?.course,
+          ),
+        );
       })
       .catch((err) => {
         console.error(err);
