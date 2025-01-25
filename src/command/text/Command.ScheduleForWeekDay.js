@@ -35,16 +35,22 @@ export default class CommandSelect extends CommandClass {
     if (daysToAdd < 0) daysToAdd += 7;
     currentDate.setDate(currentDate.getDate() + daysToAdd);
 
-    let lessons;
-    if (this.user.hexlet) {
-      lessons = (await api.lessons(this.user.groupId)).lessons;
-    } else if (this.user.mgok) {
-      lessons = await sheets.lessons(
-        this.user?.mgok?.groupName,
-        this.user?.mgok?.course,
-        new Date(startOfWeek(currentDate, { weekStartsOn: 1 })),
-      );
-    }
+    let lessons = this.user?.mgok?.groupName
+      ? await sheets.lessons(
+          this.user?.mgok?.groupName,
+          this.user?.mgok?.course,
+          new Date(startOfWeek(currentDate, { weekStartsOn: 1 })),
+        )
+      : (await api.lessons(this.user.groupId)).lessons;
+
+    if (lessons == null)
+      return this.ctx.telegram
+        .sendMessage(
+          this.chatId,
+          `ℹ️ Информация\n\n❌ Нет расписания на ${selectWeekDayWord}`,
+          MenuMain,
+        )
+        .catch((err) => console.error(err));
 
     const getForCurrentDay = lessons
       .filter((lesson) => lesson.weekday == currentDate.getDay())

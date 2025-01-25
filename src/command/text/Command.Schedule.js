@@ -17,9 +17,20 @@ export default class CommandSelect extends CommandClass {
     )
       return;
 
-    // const lessons = (await api.lessons(this.user.groupId)).lessons;
-    const lessons = await sheets.lessons("01.ПиОСО.23.ОФ.О.2", 1);
-    console.log(lessons);
+    let lessons = this.user?.mgok?.groupName
+      ? await sheets.lessons(
+          this.user?.mgok?.groupName,
+          this.user?.mgok?.course,
+        )
+      : (await api.lessons(this.user.groupId)).lessons;
+    if (lessons == null)
+      return this.ctx.telegram
+        .sendMessage(
+          this.chatId,
+          "ℹ️ Информация\n\n❌ Нет расписания на сегодня",
+          MenuMain,
+        )
+        .catch((err) => console.error(err));
 
     const currentDate = new Date();
     currentDate.setHours(0, 0, 0, 0);
