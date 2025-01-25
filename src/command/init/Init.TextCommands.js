@@ -3,7 +3,7 @@ import User from "../../db/model/User.js";
 import CommandSelectCollege from "../text/Command.SelectCollege.js";
 import CommandSelectCourse from "../text/Command.SelectCourse.js";
 import CommandSelectMGOKGroup from "../text/Command.SelectMGOKGroup.js";
-import CommandSelectGroup from "../text/Command.SelectGroup.js";
+import CommandSelectHEXLETGroup from "../text/Command.SelectHEXLETGroup.js";
 import CommandProfile from "../text/Command.Profile.js";
 
 import CommandChangeGroup from "../text/Command.ChangeGroup.js";
@@ -52,7 +52,7 @@ export default class {
         new CommandSelectCollege(payload),
         new CommandSelectCourse(payload),
         new CommandSelectMGOKGroup(payload),
-        new CommandSelectGroup(payload),
+        new CommandSelectHEXLETGroup(payload),
         new CommandProfile(payload),
         new CommandChangeGroup(payload),
         new CommandMainMenu(payload),
