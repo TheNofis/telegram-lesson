@@ -21,7 +21,7 @@ export default class CommandSelect extends CommandClass {
     this.ctx.telegram
       .sendMessage(
         this.chatId,
-        `👤 Профиль\n\nℹ️ Имя: ${this.user.username}\n🏫 Колледж: ${college}\n${course}📚 Группа: ${groupname}\n\n✉️ Связаться: @thenofis\n🔗 GitHub: https://github.com/TheNofis/telegram-lesson`,
+        `👤 Профиль\n\nℹ️ Имя: ${this.user.username}\n🏫 Колледж: ${college}\n📚 Группа: ${groupname}\n${course}\n✉️ Связаться: @thenofis\n🔗 GitHub: https://github.com/TheNofis/telegram-lesson`,
         MenuMain,
       )
       .catch((err) => console.error(err));
