@@ -1,111 +1,104 @@
 import CommandClass from "./Command.Class.js";
+
 import api from "../../api/api.js";
 import sheets from "../../api/sheets.js";
+
 import MenuMain from "../../menu/Menu.Main.js";
+
 import { createTextTable, createPhotoTable } from "../../utils/createTable.js";
 
 export default class CommandSelect extends CommandClass {
-  isValidCommand() {
-    return (
-      this.text === "📋 Расписание на сегодня" ||
-      this.text === "📋 Расписание на завтра"
-    );
-  }
-
   async handle() {
-    if (!this.isValidCommand()) return;
-
-    const lessons = await this.fetchLessons();
-    if (!lessons) {
-      await this.sendNoScheduleMessage("сегодня");
+    if (
+      !(
+        this.text == "📋 Расписание на сегодня" ||
+        this.text == "📋 Расписание на завтра"
+      )
+    )
       return;
-    }
+    let lessons = this.user?.mgok?.groupName
+      ? await sheets.lessons(
+          this.user?.mgok?.groupName,
+          this.user?.mgok?.course,
+        )
+      : (await api.lessons(this.user?.hexlet?.groupId)).lessons;
 
-    const currentDate = this.getSelectedDate();
-    const todaysLessons = this.filterAndSortLessons(lessons, currentDate);
+    if (lessons == null)
+      return this.ctx.telegram
+        .sendMessage(
+          this.chatId,
+          "ℹ️ Информация\n\n❌ Нет расписания на сегодня",
+          MenuMain,
+        )
+        .catch((err) => console.error(err));
 
-    if (todaysLessons.length === 0) {
-      await this.sendNoScheduleMessage(this.getDayText());
-      return;
-    }
-
-    await this.sendScheduleMessage(todaysLessons, currentDate);
-  }
-
-  async fetchLessons() {
-    if (this.user?.mgok?.groupName) {
-      return await sheets.lessons(
-        this.user.mgok.groupName,
-        this.user.mgok.course,
-      );
-    }
-    return (await api.lessons(this.user.groupId)).lessons;
-  }
-
-  getSelectedDate() {
     const currentDate = new Date();
     currentDate.setHours(0, 0, 0, 0);
 
-    if (this.text === "📋 Расписание на завтра") {
+    if (this.text == "📋 Расписание на завтра")
       currentDate.setDate(currentDate.getDate() + 1);
-    }
 
-    return currentDate;
-  }
+    const getForCurrentDay = lessons
+      .filter((lesson) => lesson.weekday == currentDate.getDay())
+      .sort((a, b) => {
+        if (a.lesson > b.lesson) return 1;
+        if (a.lesson < b.lesson) return -1;
+        return 0;
+      });
 
-  getDayText() {
-    return this.text === "📋 Расписание на завтра" ? "завтра" : "сегодня";
-  }
-
-  async sendNoScheduleMessage(day) {
-    await this.ctx.telegram
-      .sendMessage(
-        this.chatId,
-        `ℹ️ Информация\n\n❌ Нет расписания на ${day}`,
-        MenuMain,
-      )
-      .catch((err) => console.error(err));
-  }
-
-  filterAndSortLessons(lessons, currentDate) {
-    return lessons
-      .filter((lesson) => lesson.weekday === currentDate.getDay())
-      .sort((a, b) => a.lesson - b.lesson);
-  }
-
-  async sendScheduleMessage(todaysLessons, currentDate) {
-    if (this.user?.table) {
-      await this.sendPhotoSchedule(todaysLessons, currentDate);
-    } else {
-      await this.sendTextSchedule(todaysLessons, currentDate);
-    }
-  }
-
-  async sendPhotoSchedule(todaysLessons, currentDate) {
-    this.ctx.telegram.sendChatAction(this.chatId, "upload_photo");
-    try {
+    if (getForCurrentDay.length == 0)
+      return this.ctx.telegram
+        .sendMessage(
+          this.chatId,
+          this.text == "📋 Расписание на завтра"
+            ? "ℹ️ Информация\n\n❌ Нет расписания на завтра"
+            : "ℹ️ Информация\n\n❌ Нет расписания на сегодня",
+          MenuMain,
+        )
+        .catch((err) => console.error(err));
+    if (this?.user?.table) {
+      this.ctx.telegram.sendChatAction(this.chatId, "upload_photo");
       const { buffer, caption } = await createPhotoTable(
-        todaysLessons,
+        getForCurrentDay,
         currentDate,
-      );
-      await this.ctx.telegram.sendPhoto(
-        this.chatId,
-        { source: buffer, parse_mode: "markdown" },
-        { caption, parse_mode: "markdown", ...MenuMain },
-      );
-    } catch (err) {
-      console.error(err);
-      await this.sendTextSchedule(todaysLessons, currentDate);
+      ).catch((err) => console.error(err));
+      this.ctx.telegram
+        .sendPhoto(
+          this.chatId,
+          {
+            source: buffer,
+            parse_mode: "markdown",
+          },
+          {
+            caption: caption,
+            parse_mode: "markdown",
+            ...MenuMain,
+          },
+        )
+        .catch(() => {
+          this.ctx.telegram
+            .sendMessage(
+              this.chatId,
+              createTextTable(getForCurrentDay, currentDate),
+              {
+                parse_mode: "markdown",
+                ...MenuMain,
+              },
+            )
+            .catch((err) => console.error(err));
+        });
+    } else {
+      this.ctx.telegram.sendChatAction(this.chatId, "typing");
+      this.ctx.telegram
+        .sendMessage(
+          this.chatId,
+          createTextTable(getForCurrentDay, currentDate),
+          {
+            parse_mode: "markdown",
+            ...MenuMain,
+          },
+        )
+        .catch((err) => console.error(err));
     }
-  }
-
-  async sendTextSchedule(todaysLessons, currentDate) {
-    this.ctx.telegram.sendChatAction(this.chatId, "typing");
-    await this.ctx.telegram
-      .sendMessage(this.chatId, createTextTable(todaysLessons, currentDate), {
-        parse_mode: "markdown",
-        ...MenuMain,
-      })
-      .catch((err) => console.error(err));
   }
 }
