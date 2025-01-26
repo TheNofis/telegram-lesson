@@ -3,6 +3,7 @@ import User from "../../db/model/User.js";
 import CommandClass from "./Command.Class.js";
 
 import MenuSelectCollege from "../../menu/Menu.SelectCollege.js";
+import MenuMain from "../../menu/Menu.Main.js";
 
 export default class CommandSelect extends CommandClass {
   async handle() {
@@ -34,6 +35,16 @@ export default class CommandSelect extends CommandClass {
             this.chatId,
             "❌ Ошибка регистрация\n\nℹ️ Не удалось зарегистрироваться!",
           );
+        });
+    } else {
+      this.ctx.telegram
+        .sendMessage(
+          this.chatId,
+          "ℹ️ Информация\n\n❌ Вы уже зарегистрированы",
+          MenuMain,
+        )
+        .catch((err) => {
+          console.error(err);
         });
     }
   }
