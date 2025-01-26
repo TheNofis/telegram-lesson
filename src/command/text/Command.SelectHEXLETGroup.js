@@ -38,8 +38,7 @@ export default class CommandSelect extends CommandClass {
           "hexlet.groupId": findGroup.id || "",
         },
         $unset: {
-          "mgok.course": null,
-          "mgok.groupName": null,
+          mgok: null,
         },
       },
     )
