@@ -41,7 +41,7 @@ const createPhotoTable = async (rows, date) => {
 
 const createTextTable = (rows, date) => {
   const table = [
-    `┏━━━━━━━━━━━━━━━━━━━━━━\n┃ Дата:    ${format(date, "dd.MM.yy")} (${weekDay[date.getDay()]})\n┣━━━━━━━━━━━━━━━━━━━━━━`,
+    `┏━━━━━━━━━━━━━━━━━━\n┃ Дата:    ${format(date, "dd.MM.yy")} (${weekDay[date.getDay()]})\n┣━━━━━━━━━━━━━━━━━━`,
   ];
   rows
     .filter((e) => e?.subject?.name)
@@ -59,10 +59,10 @@ const createTextTable = (rows, date) => {
       table.push(
         `┃ Каб.      ${cabinet?.name.replaceAll("\n", " ") || "***Не указан***"}`,
       );
-      if (i != rows.length - 1) table.push("┣━━━━━━━━━━━━━━━━━━━━━━");
+      if (i != rows.length - 1) table.push("┣━━━━━━━━━━━━━━━━━━");
     });
 
-  table.push("┗━━━━━━━━━━━━━━━━━━━━━━");
+  table.push("┗━━━━━━━━━━━━━━━━━━");
 
   return table.join("\n");
 };
