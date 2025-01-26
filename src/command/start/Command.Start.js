@@ -36,8 +36,8 @@ export default class CommandSelect extends CommandClass {
             "❌ Ошибка регистрация\n\nℹ️ Не удалось зарегистрироваться!",
           );
         });
-    } else {
-      this.ctx.telegram
+    } else
+      return this.ctx.telegram
         .sendMessage(
           this.chatId,
           "ℹ️ Информация\n\n❌ Вы уже зарегистрированы",
@@ -46,6 +46,5 @@ export default class CommandSelect extends CommandClass {
         .catch((err) => {
           console.error(err);
         });
-    }
   }
 }
