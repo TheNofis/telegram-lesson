@@ -39,7 +39,7 @@ export default class CommandSelect extends CommandClass {
         this.user.mgok.course,
       );
     }
-    return (await api.lessons(this.user.groupId)).lessons;
+    return (await api.lessons(this?.user?.hexlet?.groupId)).lessons;
   }
 
   getSelectedDate() {
