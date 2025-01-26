@@ -6,6 +6,7 @@ import CommandSelectMGOKGroup from "../text/Command.SelectMGOKGroup.js";
 import CommandSelectHEXLETGroup from "../text/Command.SelectHEXLETGroup.js";
 import CommandProfile from "../text/Command.Profile.js";
 
+import CommandChangeCollege from "../text/Command.ChangeCollege.js";
 import CommandChangeGroup from "../text/Command.ChangeGroup.js";
 import CommandMainMenu from "../text/Command.MainMenu.js";
 import CommandSchedule from "../text/Command.Schedule.js";
@@ -54,6 +55,7 @@ export default class {
         new CommandSelectMGOKGroup(payload),
         new CommandSelectHEXLETGroup(payload),
         new CommandProfile(payload),
+        new CommandChangeCollege(payload),
         new CommandChangeGroup(payload),
         new CommandMainMenu(payload),
         new CommandSchedule(payload),

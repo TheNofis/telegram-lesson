@@ -1,7 +1,7 @@
 import CommandClass from "./Command.Class.js";
 
 import MenuSelectCourse from "../../menu/Menu.SelectCourse.js";
-import MenuSelectHexletGroup from "../../menu/Menu.SelectGroup.js";
+import MenuSelectHexletGroup from "../../menu/Menu.SelectHEXLETGroup.js";
 
 export default class CommandSelect extends CommandClass {
   isValidCommand() {
@@ -16,7 +16,7 @@ export default class CommandSelect extends CommandClass {
         .sendMessage(
           this.chatId,
           "ℹ️ Регистрация\n\n✅ Для удобной работы в боте надо зарегистрироваться!\n🔻 Выберите ваш курс снизу",
-          MenuSelectCourse,
+          MenuSelectCourse.MenuSelectCourseNoBack,
         )
         .catch((err) => console.error(err));
     }
