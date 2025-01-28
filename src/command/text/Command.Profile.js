@@ -1,6 +1,6 @@
 import CommandClass from "./Command.Class.js";
 
-import MenuMain from "../../menu/Menu.Main.js";
+import MenuProfile from "../../menu/Menu.Profile.js";
 
 export default class CommandSelect extends CommandClass {
   isValidCommand() {
@@ -22,7 +22,7 @@ export default class CommandSelect extends CommandClass {
       .sendMessage(
         this.chatId,
         `👤 Профиль\n\nℹ️ Имя: ${this.user.username}\n🏫 Колледж: ${college}\n📚 Группа: ${groupname}\n${course}\n✉️ Связаться: @thenofis\n🔗 GitHub: https://github.com/TheNofis/telegram-lesson`,
-        MenuMain,
+        MenuProfile,
       )
       .catch((err) => console.error(err));
   }

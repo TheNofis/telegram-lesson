@@ -5,7 +5,7 @@ import "./db/connect/mongodb.js";
 
 import InitStartCommand from "./command/init/Init.StartCommand.js";
 import InitTextCommand from "./command/init/Init.TextCommands.js";
-// import CallbackCommandInit from "./CallbackCommandInit.js";
+import CallbackCommandInit from "./command/init/Init.CallbackCommands.js";
 
 dotenv.config();
 
@@ -21,7 +21,7 @@ class Bot {
     this.initCommandList = [
       new InitStartCommand(payload),
       new InitTextCommand(payload),
-      // new CallbackCommandInit(this.bot),
+      new CallbackCommandInit(payload),
     ];
 
     this.initCommandList.forEach((command) => command.handle());
