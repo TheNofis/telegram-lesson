@@ -17,11 +17,12 @@ export default class CommandSelect extends CommandClass {
     const college = this.user?.hexlet?.groupId ? "Hexlet" : "МГОК";
     const course =
       college == "МГОК" ? `🎓 Курс: ${this.user?.mgok?.course + 1}\n` : "";
+    const table = this.user?.table ? "Текст" : "Картинка";
 
     this.ctx.telegram
       .sendMessage(
         this.chatId,
-        `👤 Профиль\n\nℹ️ Имя: ${this.user.username}\n🏫 Колледж: ${college}\n📚 Группа: ${groupname}\n${course}\n✉️ Связаться: @thenofis\n🔗 GitHub: https://github.com/TheNofis/telegram-lesson`,
+        `👤 Профиль\n\nℹ️ Имя: ${this.user.username}\n🏫 Колледж: ${college}\n📚 Группа: ${groupname}\n${course}🗓 Отображение расписания: ${table}\n\n✉️ Связаться: @thenofis\n🔗 GitHub: https://github.com/TheNofis/telegram-lesson`,
         MenuProfile,
       )
       .catch((err) => console.error(err));
